@@ -17,8 +17,8 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
 >
   <div class="mobile-cta-bar__inner">
     <div class="mobile-cta-bar__text">
-      <span class="mobile-cta-bar__title">Orçamento rápido</span>
-      <span class="mobile-cta-bar__sub">Resposta direta no WhatsApp</span>
+      <span class="mobile-cta-bar__title">Cuide do seu jardim</span>
+      <span class="mobile-cta-bar__sub">Pelo WhatsApp</span>
     </div>
     <WhatsAppButton
       message={floatMessage}
@@ -65,7 +65,7 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
     right: 0;
     bottom: 0;
     z-index: var(--z-mobile-bar);
-    padding: 0.65rem var(--container-px) max(0.7rem, env(safe-area-inset-bottom));
+    padding: 0.65rem var(--container-px) calc(0.65rem + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.96);
     border-top: 1px solid var(--color-border-subtle);
     backdrop-filter: blur(14px);
@@ -73,6 +73,7 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
     transform: translateY(110%);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
     transition:
       transform var(--transition-base),
       opacity var(--transition-base);
@@ -82,6 +83,11 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+    visibility: visible;
+  }
+
+  .mobile-cta-bar :global(.btn) {
+    min-height: 44px;
   }
 
   /* Nunca competir com menu mobile ou lightbox abertos */
@@ -90,6 +96,7 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
     transform: translateY(110%);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
   }
 
   .mobile-cta-bar__inner {
@@ -147,6 +154,7 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
       align-items: center;
       gap: var(--space-3);
       opacity: 0;
+      visibility: hidden;
       transform: translateY(16px);
       pointer-events: none;
       transition:
@@ -156,6 +164,7 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
 
     .desktop-whatsapp-float[data-visible='true'] {
       opacity: 1;
+      visibility: visible;
       transform: translateY(0);
       pointer-events: auto;
     }

@@ -55,11 +55,11 @@ const { contact, brand, navigation, credits } = siteConfig;
             {
               whatsappConfigured ? (
                 <span class="site-footer__value">
-                  {contact.whatsappDisplay || 'Atendimento direto pelo botão ao lado'}
+                  {contact.whatsappDisplay || 'Atendimento direto pelo WhatsApp'}
                 </span>
               ) : (
                 <span class="site-footer__pending">
-                  Número oficial em configuração (<code>src/config/site.ts</code>)
+                  Número de atendimento pendente
                 </span>
               )
             }
@@ -150,7 +150,7 @@ const { contact, brand, navigation, credits } = siteConfig;
     color: var(--color-surface);
     padding-top: clamp(3.5rem, 6vw, 5.5rem);
     /* Espaço seguro extra no mobile para não ser encoberto pela barra inferior */
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(var(--space-10) + env(safe-area-inset-bottom));
     scroll-margin-top: var(--header-height);
   }
 
@@ -242,13 +242,6 @@ const { contact, brand, navigation, credits } = siteConfig;
     font-size: var(--text-xs);
     color: var(--color-text-inverse-soft);
     line-height: 1.5;
-  }
-
-  .site-footer__pending code {
-    padding: 2px 6px;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-lime);
   }
 
   .site-footer__bottom {

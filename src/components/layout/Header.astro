@@ -30,9 +30,9 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
         <WhatsAppButton
           message={siteConfig.whatsappMessages.header}
           label="Solicitar orçamento"
-          variant="lime"
+          variant="outline-dark"
           size="sm"
-          icon="arrow"
+          icon="whatsapp"
         />
       </div>
 
@@ -51,15 +51,16 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
 </header>
 
 <!-- Painel de navegação mobile -->
-<div class="mobile-nav" id="mobile-nav-drawer" hidden data-mobile-nav>
+<dialog class="mobile-nav" id="mobile-nav-drawer" aria-label="Menu de navegação" data-mobile-nav>
   <div class="mobile-nav__backdrop" data-menu-close />
-  <div class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+  <div class="mobile-nav__panel">
     <div class="mobile-nav__top">
       <BrandLogo variant="dark" showSubtitle={false} />
       <button
         type="button"
         class="mobile-nav__close"
         aria-label="Fechar menu"
+        autofocus
         data-menu-close
       >
         <X size={22} stroke-width={2} />
@@ -71,7 +72,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
         {
           siteConfig.navigation.map((item) => (
             <li>
-              <a href={item.href} class="mobile-nav__link" data-mobile-nav-link>
+              <a href={item.href} class="mobile-nav__link">
                 {item.label}
               </a>
             </li>
@@ -89,10 +90,9 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
         icon="both"
         fullWidth
       />
-      <p class="mobile-nav__hint">Atendimento direto pelo WhatsApp.</p>
     </div>
   </div>
-</div>
+</dialog>
 
 <style>
   .site-header {
@@ -101,7 +101,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
     left: 0;
     right: 0;
     z-index: var(--z-header);
-    padding-top: calc(var(--space-4) + 6px);
+    padding-top: calc(var(--space-4) + 6px + env(safe-area-inset-top));
     transition: padding var(--transition-base);
     pointer-events: none;
   }
@@ -131,7 +131,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
   }
 
   .site-header[data-scrolled='true'] {
-    padding-top: var(--space-3);
+    padding-top: calc(var(--space-3) + env(safe-area-inset-top));
   }
 
   .site-header[data-scrolled='true'] .site-header__bar {
@@ -174,20 +174,29 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
   .mobile-nav {
     position: fixed;
     inset: 0;
-    z-index: var(--z-drawer);
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .mobile-nav[open] {
     display: flex;
     justify-content: flex-end;
   }
 
-  .mobile-nav[hidden] {
-    display: none;
+  .mobile-nav::backdrop {
+    background: rgba(11, 34, 26, 0.56);
+    backdrop-filter: blur(4px);
   }
 
   .mobile-nav__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(11, 34, 26, 0.56);
-    backdrop-filter: blur(4px);
   }
 
   .mobile-nav__panel {
@@ -196,7 +205,8 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
     width: min(88vw, 360px);
     height: 100%;
     padding: var(--space-5);
-    padding-bottom: max(var(--space-6), env(safe-area-inset-bottom));
+    padding-top: max(var(--space-5), env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
     background: var(--color-bg-warm);
     display: flex;
     flex-direction: column;
@@ -257,10 +267,16 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
     border-top: 1px solid var(--color-border-subtle);
   }
 
-  .mobile-nav__hint {
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-    text-align: center;
+  @media (max-width: 380px) {
+    .site-header__bar {
+      margin-inline: 0;
+      gap: var(--space-2);
+    }
+
+    .site-header__brand :global(.brand-logo__subtitle) {
+      font-size: 0.65rem;
+      letter-spacing: 0.025em;
+    }
   }
 
   @media (min-width: 1024px) {

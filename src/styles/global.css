@@ -292,33 +292,117 @@ ol {
   transform: translate(2px, -1px);
 }
 
-/* Badge discreta para placeholders de imagem */
-.photo-placeholder-badge {
-  position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: var(--radius-pill);
-  background: rgba(16, 47, 37, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  pointer-events: none;
+
+/* Carrosséis de serviços e galeria */
+.carousel-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
-.photo-placeholder-badge::before {
-  content: '';
-  width: 6px;
-  height: 6px;
+.carousel-controls {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-2);
+}
+
+.carousel-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
   border-radius: 50%;
-  background-color: var(--color-lime);
+  background: var(--color-surface);
+  color: var(--color-forest);
+  transition: background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.carousel-btn--solid {
+  background: var(--color-forest);
+  color: var(--color-surface);
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background: var(--color-sage-tint);
+  color: var(--color-forest);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.carousel-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(88%, 28rem);
+  gap: var(--space-3);
+  padding-block: var(--space-1) var(--space-2);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-track > * {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.carousel-track:focus-visible {
+  outline-offset: 2px;
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 10px;
+}
+
+.carousel-dots:empty {
+  display: none;
+}
+
+.carousel-dots__item {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(16, 47, 37, 0.25);
+  transition: width var(--transition-fast), background-color var(--transition-fast);
+}
+
+.carousel-dots__item.is-active {
+  width: 24px;
+  background: var(--color-forest);
+}
+
+@media (max-width: 639px) {
+  .carousel-heading {
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 640px) {
+  .carousel-track {
+    grid-auto-columns: calc((100% - var(--space-5)) / 2);
+    gap: var(--space-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel-track {
+    grid-auto-columns: calc((100% - var(--space-6) * 2) / 3);
+    gap: var(--space-6);
+  }
 }
 
 /* Revelação sutil ao rolar (nunca bloqueia renderização se JS falhar) */

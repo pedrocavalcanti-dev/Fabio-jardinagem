@@ -18,8 +18,6 @@ const { whyChooseUs } = siteConfig.sections;
             eyebrow={whyChooseUs.eyebrow}
             titleStart={whyChooseUs.titleStart}
             titleAccent={whyChooseUs.titleAccent}
-            titleEnd={whyChooseUs.titleEnd}
-            description={whyChooseUs.description}
             align="center"
             theme="dark"
           />
@@ -31,12 +29,9 @@ const { whyChooseUs } = siteConfig.sections;
               src={whyChooseUs.image}
               alt={whyChooseUs.alt}
               widths={[640, 1024, 1400]}
-              sizes="(max-width: 1024px) 100vw, 1100px"
+              sizes="(max-width: 1260px) 85vw, 1080px"
               objectPosition={whyChooseUs.objectPosition}
             />
-            {whyChooseUs.isPlaceholder && (
-              <span class="photo-placeholder-badge">Espaço para foto real em destaque</span>
-            )}
           </div>
 
           <ul class="why-us__cards">
@@ -56,7 +51,7 @@ const { whyChooseUs } = siteConfig.sections;
           </ul>
         </div>
 
-        <div class="why-us__cta" data-reveal>
+        <div class="why-us__cta" data-inline-cta data-reveal>
           <WhatsAppButton
             message={siteConfig.whatsappMessages.whyChooseUs}
             label={whyChooseUs.ctaLabel}

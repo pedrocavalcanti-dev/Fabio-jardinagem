@@ -9,9 +9,13 @@ interface LightboxItem {
   caption: string;
   src: string;
   alt: string;
-  isPlaceholder: boolean;
-  whatsappMessage: string;
-  whatsappUrl: string | null;
+}
+
+function syncOverlayState(): void {
+  document.body.classList.toggle(
+    'has-overlay-open',
+    Boolean(document.querySelector('dialog[open]')),
+  );
 }
 
 function initHeaderScroll(): void {
@@ -27,47 +31,38 @@ function initHeaderScroll(): void {
 }
 
 function initMobileMenu(): void {
-  const toggleBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-  const drawer = document.querySelector<HTMLElement>('[data-mobile-nav]');
-  if (!toggleBtn || !drawer) return;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const drawer = document.querySelector<HTMLDialogElement>('[data-mobile-nav]');
+  if (!toggle || !drawer) return;
 
-  const closeTargets = drawer.querySelectorAll<HTMLElement>('[data-menu-close], [data-mobile-nav-link]');
-  const closeBtn = drawer.querySelector<HTMLButtonElement>('.mobile-nav__close');
-
-  const openMenu = () => {
-    drawer.hidden = false;
-    toggleBtn.setAttribute('aria-expanded', 'true');
-    document.body.classList.add('has-overlay-open');
-    closeBtn?.focus();
-  };
-
-  const closeMenu = (restoreFocus = true) => {
-    if (drawer.hidden) return;
-    drawer.hidden = true;
-    toggleBtn.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('has-overlay-open');
-    if (restoreFocus) toggleBtn.focus();
-  };
-
-  toggleBtn.addEventListener('click', () => {
-    if (drawer.hidden) {
-      openMenu();
-    } else {
-      closeMenu();
-    }
+  toggle.addEventListener('click', () => {
+    drawer.showModal();
+    toggle.setAttribute('aria-expanded', 'true');
+    syncOverlayState();
   });
 
-  closeTargets.forEach((el) => {
-    el.addEventListener('click', () => {
-      const isNavLink = el.hasAttribute('data-mobile-nav-link');
-      closeMenu(!isNavLink);
+  drawer.addEventListener('close', () => {
+    toggle.setAttribute('aria-expanded', 'false');
+    syncOverlayState();
+  });
+
+  drawer.querySelectorAll('[data-menu-close]').forEach((control) => {
+    control.addEventListener('click', () => drawer.close());
+  });
+
+  drawer.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      drawer.close();
+      const section = document.getElementById(link.hash.slice(1));
+      if (section) {
+        section.tabIndex = -1;
+        section.focus({ preventScroll: true });
+      }
     });
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !drawer.hidden) {
-      closeMenu(true);
-    }
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+    if (event.matches && drawer.open) drawer.close();
   });
 }
 
@@ -75,99 +70,111 @@ function initMobileCtaBar(): void {
   const bar = document.querySelector<HTMLElement>('[data-mobile-cta-bar]');
   const desktopFloat = document.querySelector<HTMLElement>('[data-desktop-wa-float]');
   const heroCta = document.querySelector<HTMLElement>('[data-hero-cta]');
-  if ((!bar && !desktopFloat) || !heroCta) return;
+  if (!heroCta) return;
 
-  const setVisible = (visible: boolean) => {
-    const val = visible ? 'true' : 'false';
-    if (bar) bar.dataset.visible = val;
-    if (desktopFloat) desktopFloat.dataset.visible = val;
+  const competingActions = document.querySelectorAll<HTMLElement>('[data-inline-cta], #contato');
+  const viewport = window.visualViewport;
+  const visibleActions = new Set<Element>();
+  let pastHero = false;
+
+  const sync = () => {
+    const keyboardOpen = viewport && window.innerHeight - viewport.height > 150;
+    const visible = pastHero && visibleActions.size === 0 && !keyboardOpen;
+    if (bar) bar.dataset.visible = String(visible);
+    if (desktopFloat) desktopFloat.dataset.visible = String(visible);
   };
 
-  if (!('IntersectionObserver' in window)) {
-    setVisible(true);
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const [entry] = entries;
-      if (!entry) return;
-      const scrolledPastHero = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      setVisible(scrolledPastHero);
-    },
-    { threshold: 0.1 },
-  );
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.target === heroCta) {
+        pastHero = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
+      } else if (entry.isIntersecting) {
+        visibleActions.add(entry.target);
+      } else {
+        visibleActions.delete(entry.target);
+      }
+    }
+    sync();
+  });
 
   observer.observe(heroCta);
+  competingActions.forEach((action) => observer.observe(action));
+  viewport?.addEventListener('resize', sync);
 }
 
 function initCarousels(): void {
-  const tracks = document.querySelectorAll<HTMLElement>('[data-carousel-track]');
-
-  tracks.forEach((track) => {
+  document.querySelectorAll<HTMLElement>('[data-carousel-track]').forEach((track) => {
     const key = track.dataset.carouselTrack;
-    if (!key) return;
-
-    const prevBtn = document.querySelector<HTMLButtonElement>(`[data-carousel-prev="${key}"]`);
-    const nextBtn = document.querySelector<HTMLButtonElement>(`[data-carousel-next="${key}"]`);
+    const prev = document.querySelector<HTMLButtonElement>(`[data-carousel-prev="${key}"]`);
+    const next = document.querySelector<HTMLButtonElement>(`[data-carousel-next="${key}"]`);
     const dotsWrap = document.querySelector<HTMLElement>(`[data-carousel-dots="${key}"]`);
-    const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll<HTMLElement>('[data-dot]')) : [];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let positions = [0];
+    let dots: HTMLSpanElement[] = [];
 
-    const getStepWidth = (): number => {
-      const firstChild = track.firstElementChild as HTMLElement | null;
-      if (!firstChild) return track.clientWidth * 0.85;
-      const styles = window.getComputedStyle(track);
-      const gap = parseFloat(styles.columnGap || styles.gap || '16');
-      return firstChild.getBoundingClientRect().width + gap;
-    };
-
-    const syncState = () => {
-      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth - 4);
-      if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
-      if (nextBtn) nextBtn.disabled = track.scrollLeft >= maxScroll;
-
-      if (dots.length > 0) {
-        const step = getStepWidth();
-        const activeIndex = Math.min(
-          dots.length - 1,
-          Math.max(0, Math.round(track.scrollLeft / Math.max(1, step))),
-        );
-        dots.forEach((dot, idx) => {
-          dot.classList.toggle('is-active', idx === activeIndex);
-        });
-      }
-    };
-
-    prevBtn?.addEventListener('click', () => {
-      track.scrollBy({ left: -getStepWidth(), behavior: 'smooth' });
-    });
-
-    nextBtn?.addEventListener('click', () => {
-      track.scrollBy({ left: getStepWidth(), behavior: 'smooth' });
-    });
-
-    track.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        track.scrollBy({ left: getStepWidth(), behavior: 'smooth' });
-      } else if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        track.scrollBy({ left: -getStepWidth(), behavior: 'smooth' });
-      }
-    });
-
-    let rafId = 0;
-    track.addEventListener(
-      'scroll',
-      () => {
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(syncState);
-      },
-      { passive: true },
+    const currentIndex = () => positions.reduce(
+      (closest, position, index) =>
+        Math.abs(position - track.scrollLeft) < Math.abs(positions[closest] - track.scrollLeft)
+          ? index
+          : closest,
+      0,
     );
 
-    window.addEventListener('resize', syncState, { passive: true });
-    syncState();
+    const sync = () => {
+      const active = currentIndex();
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= positions[positions.length - 1] - 2;
+      dots.forEach((dot, index) => dot.classList.toggle('is-active', index === active));
+    };
+
+    const measure = () => {
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      const left = track.getBoundingClientRect().left;
+      positions = [0];
+      for (const card of track.children) {
+        if (!(card instanceof HTMLElement) || card.hidden) continue;
+        const offset = card.getBoundingClientRect().left - left + track.scrollLeft;
+        const position = Math.min(Math.round(offset), maxScroll);
+        if (position > positions[positions.length - 1] + 2) positions.push(position);
+      }
+
+      if (dotsWrap && dots.length !== (positions.length > 1 ? positions.length : 0)) {
+        dots = positions.length > 1 ? positions.map(() => {
+          const dot = document.createElement('span');
+          dot.className = 'carousel-dots__item';
+          return dot;
+        }) : [];
+        dotsWrap.replaceChildren(...dots);
+      }
+      sync();
+    };
+
+    const goTo = (index: number) => {
+      const position = positions[Math.min(Math.max(0, index), positions.length - 1)];
+      track.scrollTo({ left: position, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    };
+
+    prev?.addEventListener('click', () => goTo(currentIndex() - 1));
+    next?.addEventListener('click', () => goTo(currentIndex() + 1));
+    track.addEventListener('keydown', (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      const index = currentIndex();
+      const destinations: Record<string, number> = {
+        ArrowLeft: index - 1,
+        ArrowRight: index + 1,
+        Home: 0,
+        End: positions.length - 1,
+      };
+      const destination = destinations[event.key];
+      if (typeof destination !== 'number') return;
+      event.preventDefault();
+      goTo(destination);
+    });
+
+    track.addEventListener('scroll', sync, { passive: true });
+    track.addEventListener('gallery-filter-change', measure);
+    new ResizeObserver(measure).observe(track);
+    measure();
   });
 }
 
@@ -182,113 +189,75 @@ function initGalleryFilters(): void {
 
       buttons.forEach((other) => {
         const active = other === btn;
-        other.classList.toggle('is-active', active);
-        other.setAttribute('aria-selected', active ? 'true' : 'false');
+        other.setAttribute('aria-pressed', String(active));
       });
 
       items.forEach((item) => {
         const matches = selected === 'Todos' || item.dataset.category === selected;
         item.hidden = !matches;
       });
+      const track = items[0].parentElement;
+      track?.scrollTo({ left: 0, behavior: 'instant' });
+      track?.dispatchEvent(new Event('gallery-filter-change'));
     });
   });
 }
 
 function initLightbox(): void {
-  const modal = document.querySelector<HTMLElement>('[data-lightbox]');
-  const dataEl = document.getElementById('portfolio-lightbox-data');
-  if (!modal || !dataEl?.textContent) return;
+  const modal = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const data = document.getElementById('portfolio-lightbox-data')?.textContent;
+  if (!modal || !data) return;
 
-  let items: LightboxItem[] = [];
-  try {
-    items = JSON.parse(dataEl.textContent) as LightboxItem[];
-  } catch {
-    return;
-  }
-  if (items.length === 0) return;
-
-  const imgEl = modal.querySelector<HTMLImageElement>('[data-lightbox-img]');
-  const placeholderEl = modal.querySelector<HTMLElement>('[data-lightbox-placeholder]');
-  const categoryEl = modal.querySelector<HTMLElement>('[data-lightbox-category]');
-  const titleEl = modal.querySelector<HTMLElement>('[data-lightbox-title]');
-  const descEl = modal.querySelector<HTMLElement>('[data-lightbox-desc]');
-  const counterEl = modal.querySelector<HTMLElement>('[data-lightbox-counter]');
-  const waLinkEl = modal.querySelector<HTMLAnchorElement>('[data-lightbox-wa-link]');
-  const waFallbackEl = modal.querySelector<HTMLButtonElement>('[data-lightbox-wa-fallback]');
-  const prevBtn = modal.querySelector<HTMLButtonElement>('[data-lightbox-prev]');
-  const nextBtn = modal.querySelector<HTMLButtonElement>('[data-lightbox-next]');
-  const closeBtn = modal.querySelector<HTMLButtonElement>('.lightbox__close');
-  const closeTargets = modal.querySelectorAll<HTMLElement>('[data-lightbox-close]');
-  const openTriggers = document.querySelectorAll<HTMLButtonElement>('[data-lightbox-open]');
-
+  const items: LightboxItem[] = JSON.parse(data);
+  const img = modal.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  const category = modal.querySelector<HTMLElement>('[data-lightbox-category]');
+  const title = modal.querySelector<HTMLElement>('[data-lightbox-title]');
+  const description = modal.querySelector<HTMLElement>('[data-lightbox-desc]');
+  const counter = modal.querySelector<HTMLElement>('[data-lightbox-counter]');
+  const prev = modal.querySelector<HTMLButtonElement>('[data-lightbox-prev]');
+  const next = modal.querySelector<HTMLButtonElement>('[data-lightbox-next]');
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-lightbox-open]'));
+  let visibleItems: LightboxItem[] = [];
   let currentIndex = 0;
-  let lastTrigger: HTMLElement | null = null;
 
-  const renderItem = (index: number) => {
-    currentIndex = (index + items.length) % items.length;
-    const item = items[currentIndex];
-    if (!item) return;
-
-    if (imgEl) {
-      imgEl.src = item.src;
-      imgEl.alt = item.alt;
+  const show = (index: number) => {
+    currentIndex = (index + visibleItems.length) % visibleItems.length;
+    const item = visibleItems[currentIndex];
+    if (img) {
+      img.src = item.src;
+      img.alt = item.alt;
     }
-    if (placeholderEl) placeholderEl.hidden = !item.isPlaceholder;
-    if (categoryEl) categoryEl.textContent = item.category;
-    if (titleEl) titleEl.textContent = item.title;
-    if (descEl) descEl.textContent = item.caption;
-    if (counterEl) counterEl.textContent = `${currentIndex + 1} / ${items.length}`;
-
-    if (waLinkEl && item.whatsappUrl) {
-      waLinkEl.href = item.whatsappUrl;
-    }
-    if (waFallbackEl) {
-      waFallbackEl.dataset.whatsappMessage = item.whatsappMessage;
-    }
+    if (category) category.textContent = item.category;
+    if (title) title.textContent = item.title;
+    if (description) description.textContent = item.caption;
+    if (counter) counter.textContent = `${currentIndex + 1} / ${visibleItems.length}`;
+    if (prev) prev.hidden = visibleItems.length < 2;
+    if (next) next.hidden = visibleItems.length < 2;
   };
 
-  const openModal = (index: number, trigger: HTMLElement | null) => {
-    lastTrigger = trigger;
-    renderItem(index);
-    modal.hidden = false;
-    document.body.classList.add('has-overlay-open');
-    closeBtn?.focus();
-  };
-
-  const closeModal = () => {
-    if (modal.hidden) return;
-    modal.hidden = true;
-    document.body.classList.remove('has-overlay-open');
-    lastTrigger?.focus();
-  };
-
-  openTriggers.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const index = Number(btn.dataset.lightboxOpen || '0');
-      openModal(index, btn);
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const visibleIds = new Set(triggers.filter((button) => !button.closest('[hidden]'))
+        .map((button) => button.dataset.lightboxOpen));
+      visibleItems = items.filter((item) => visibleIds.has(item.id));
+      const index = visibleItems.findIndex((item) => item.id === trigger.dataset.lightboxOpen);
+      if (index < 0) return;
+      show(index);
+      modal.showModal();
+      syncOverlayState();
     });
   });
 
-  prevBtn?.addEventListener('click', () => renderItem(currentIndex - 1));
-  nextBtn?.addEventListener('click', () => renderItem(currentIndex + 1));
-
-  closeTargets.forEach((el) => {
-    el.addEventListener('click', closeModal);
+  prev?.addEventListener('click', () => show(currentIndex - 1));
+  next?.addEventListener('click', () => show(currentIndex + 1));
+  modal.querySelectorAll('[data-lightbox-close]').forEach((control) => {
+    control.addEventListener('click', () => modal.close());
   });
-
-  // Se o usuário clicar no fallback do WhatsApp dentro do lightbox, fecha o lightbox primeiro
-  waFallbackEl?.addEventListener('click', () => {
-    modal.hidden = true;
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (modal.hidden) return;
-    if (event.key === 'Escape') {
-      closeModal();
-    } else if (event.key === 'ArrowLeft') {
-      renderItem(currentIndex - 1);
-    } else if (event.key === 'ArrowRight') {
-      renderItem(currentIndex + 1);
+  modal.addEventListener('close', syncOverlayState);
+  modal.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      show(currentIndex + (event.key === 'ArrowLeft' ? -1 : 1));
     }
   });
 }
@@ -335,7 +304,7 @@ function initFaqAccordion(): void {
 }
 
 function initWhatsAppFallback(): void {
-  const modal = document.getElementById('whatsapp-fallback-modal');
+  const modal = document.querySelector<HTMLDialogElement>('#whatsapp-fallback-modal');
   if (!modal) return;
 
   const messageEl = modal.querySelector<HTMLElement>('[data-wa-modal-message]');
@@ -343,11 +312,9 @@ function initWhatsAppFallback(): void {
   const copyIcon = modal.querySelector<HTMLElement>('[data-copy-icon]');
   const copiedIcon = modal.querySelector<HTMLElement>('[data-copied-icon]');
   const copyLabel = modal.querySelector<HTMLElement>('[data-copy-label]');
-  const closeBtn = modal.querySelector<HTMLButtonElement>('.wa-modal__close');
   const closeTargets = modal.querySelectorAll<HTMLElement>('[data-wa-modal-close]');
 
   let currentMessage = '';
-  let lastTrigger: HTMLElement | null = null;
 
   const resetCopyState = () => {
     if (copyIcon) copyIcon.hidden = false;
@@ -355,21 +322,12 @@ function initWhatsAppFallback(): void {
     if (copyLabel) copyLabel.textContent = 'Copiar mensagem';
   };
 
-  const openModal = (message: string, trigger: HTMLElement | null) => {
+  const openModal = (message: string) => {
     currentMessage = message;
-    lastTrigger = trigger;
     if (messageEl) messageEl.textContent = message;
     resetCopyState();
-    modal.hidden = false;
-    document.body.classList.add('has-overlay-open');
-    closeBtn?.focus();
-  };
-
-  const closeModal = () => {
-    if (modal.hidden) return;
-    modal.hidden = true;
-    document.body.classList.remove('has-overlay-open');
-    lastTrigger?.focus();
+    modal.showModal();
+    syncOverlayState();
   };
 
   document.addEventListener('click', (event) => {
@@ -378,7 +336,7 @@ function initWhatsAppFallback(): void {
     if (!button) return;
 
     const msg = button.dataset.whatsappMessage || 'Olá, Fábio! Gostaria de solicitar um orçamento.';
-    openModal(msg, button);
+    openModal(msg);
   });
 
   copyBtn?.addEventListener('click', async () => {
@@ -394,14 +352,10 @@ function initWhatsAppFallback(): void {
   });
 
   closeTargets.forEach((el) => {
-    el.addEventListener('click', closeModal);
+    el.addEventListener('click', () => modal.close());
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !modal.hidden) {
-      closeModal();
-    }
-  });
+  modal.addEventListener('close', syncOverlayState);
 }
 
 function initScrollReveal(): void {

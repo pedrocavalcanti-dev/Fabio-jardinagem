@@ -18,12 +18,9 @@ const { about } = siteConfig.sections;
             src={about.mainImage}
             alt={about.mainAlt}
             widths={[480, 768, 960]}
-            sizes="(max-width: 1024px) 100vw, 48vw"
+            sizes="(max-width: 572px) 93vw, (max-width: 1023px) 540px, (min-width: 1264px) 510px, 42vw"
             objectPosition={about.mainObjectPosition}
           />
-          {about.isPlaceholder && (
-            <span class="photo-placeholder-badge">Espaço para foto real do profissional</span>
-          )}
         </div>
 
         {
@@ -33,7 +30,7 @@ const { about } = siteConfig.sections;
                 src={about.secondaryImage}
                 alt={about.secondaryAlt}
                 widths={[320, 540]}
-                sizes="(max-width: 768px) 42vw, 240px"
+                sizes="(max-width: 560px) 39vw, 210px"
                 objectPosition={about.secondaryObjectPosition}
               />
             </div>
@@ -67,7 +64,7 @@ const { about } = siteConfig.sections;
           }
         </ul>
 
-        <div class="about__action">
+        <div class="about__action" data-inline-cta>
           <WhatsAppButton
             message={siteConfig.whatsappMessages.about}
             label={about.ctaLabel}
@@ -91,14 +88,16 @@ const { about } = siteConfig.sections;
 
   .about__media {
     position: relative;
+    width: min(100%, 660px);
+    margin-inline: auto;
     padding-bottom: var(--space-6);
   }
 
   .about__photo-main {
     position: relative;
-    aspect-ratio: 4 / 4.6;
+    aspect-ratio: 4 / 3.5;
     width: 100%;
-    max-width: 480px;
+    max-width: 540px;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--color-forest);
@@ -179,6 +178,7 @@ const { about } = siteConfig.sections;
 
     .about__photo-main {
       max-width: none;
+      aspect-ratio: 4 / 4.3;
     }
   }
 </style>

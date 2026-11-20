@@ -3,66 +3,37 @@ import { ChevronLeft, ChevronRight } from '@lucide/astro';
 import { servicesContent, servicesList } from '@/data/services';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import ServiceCard from '@/components/ui/ServiceCard.astro';
+
+const { ctaLabel, ...heading } = servicesContent;
 ---
 
 <section id="servicos" class="section services" aria-labelledby="services-heading">
   <div class="container">
-    <div class="services__header" data-reveal>
-      <SectionHeading
-        id="services-heading"
-        eyebrow={servicesContent.eyebrow}
-        titleStart={servicesContent.titleStart}
-        titleAccent={servicesContent.titleAccent}
-        description={servicesContent.description}
-      />
+    <div class="carousel-heading" data-reveal>
+      <SectionHeading id="services-heading" {...heading} />
 
-      <div class="services__controls" aria-label="Navegação do carrossel de serviços">
-        <button
-          type="button"
-          class="carousel-btn"
-          data-carousel-prev="services"
-          aria-label="Ver serviço anterior"
-        >
+      <div class="carousel-controls" aria-label="Navegação do carrossel de serviços">
+        <button type="button" class="carousel-btn" data-carousel-prev="services" aria-controls="services-track" aria-label="Ver serviço anterior" disabled>
           <ChevronLeft size={20} stroke-width={2} />
         </button>
-        <button
-          type="button"
-          class="carousel-btn carousel-btn--solid"
-          data-carousel-next="services"
-          aria-label="Ver próximo serviço"
-        >
+        <button type="button" class="carousel-btn carousel-btn--solid" data-carousel-next="services" aria-controls="services-track" aria-label="Ver próximo serviço" disabled>
           <ChevronRight size={20} stroke-width={2} />
         </button>
       </div>
     </div>
 
     <div
-      class="services__track"
+      class="carousel-track"
+      id="services-track"
       data-carousel-track="services"
       tabindex="0"
       role="region"
       aria-label="Lista de serviços de jardinagem e paisagismo"
     >
-      {
-        servicesList.map((service) => (
-          <div class="services__slide">
-            <ServiceCard service={service} ctaLabel={servicesContent.ctaLabel} />
-          </div>
-        ))
-      }
+      {servicesList.map((service) => <ServiceCard service={service} ctaLabel={ctaLabel} />)}
     </div>
 
-    <div class="services__footer">
-      <div class="carousel-dots" data-carousel-dots="services" aria-hidden="true">
-        {
-          servicesList.map((service, index) => (
-            <span class:list={['carousel-dots__item', index === 0 && 'is-active']} data-dot={index} />
-          ))
-        }
-      </div>
-
-      <p class="services__note">{servicesContent.provisionalNote}</p>
-    </div>
+    <div class="carousel-dots services__dots" data-carousel-dots="services" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -71,140 +42,7 @@ import ServiceCard from '@/components/ui/ServiceCard.astro';
     background-color: var(--color-surface-muted);
   }
 
-  .services__header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    margin-bottom: var(--space-8);
-  }
-
-  .services__controls {
-    display: none;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .carousel-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    border: 1px solid var(--color-border-strong);
-    background: var(--color-surface);
-    color: var(--color-forest);
-    transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast),
-      border-color var(--transition-fast),
-      opacity var(--transition-fast);
-  }
-
-  .carousel-btn:hover:not(:disabled) {
-    background: var(--color-sage-tint);
-    border-color: var(--color-natural);
-  }
-
-  .carousel-btn--solid {
-    background: var(--color-forest);
-    border-color: var(--color-forest);
-    color: var(--color-surface);
-  }
-
-  .carousel-btn--solid:hover:not(:disabled) {
-    background: var(--color-natural);
-    border-color: var(--color-natural);
-  }
-
-  .carousel-btn:disabled {
-    opacity: 0.38;
-    cursor: not-allowed;
-  }
-
-  .services__track {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(272px, 84%);
-    gap: var(--space-4);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 2px;
-    scrollbar-width: none;
-    padding-bottom: var(--space-3);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .services__track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .services__slide {
-    scroll-snap-align: start;
-  }
-
-  .services__footer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    margin-top: var(--space-4);
-  }
-
-  .carousel-dots {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .carousel-dots__item {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-pill);
-    background: rgba(16, 47, 37, 0.2);
-    transition:
-      width var(--transition-fast),
-      background-color var(--transition-fast);
-  }
-
-  .carousel-dots__item.is-active {
-    width: 24px;
-    background: var(--color-forest);
-  }
-
-  .services__note {
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-  }
-
-  @media (min-width: 640px) {
-    .services__track {
-      grid-auto-columns: calc((100% - var(--space-5)) / 2);
-      gap: var(--space-5);
-    }
-  }
-
-  @media (min-width: 768px) {
-    .services__header {
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: space-between;
-    }
-
-    .services__controls {
-      display: flex;
-    }
-
-    .services__footer {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .services__track {
-      grid-auto-columns: calc((100% - var(--space-6) * 2) / 3);
-      gap: var(--space-6);
-    }
+  .services__dots {
+    margin-top: var(--space-3);
   }
 </style>

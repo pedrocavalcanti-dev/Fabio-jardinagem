@@ -7,11 +7,11 @@ export interface FaqItem {
 }
 
 export const faqContent = {
-  eyebrow: 'Dúvidas frequentes',
+  eyebrow: 'Antes de contratar',
   titleStart: 'Perguntas',
   titleAccent: 'frequentes.',
   description:
-    'Reunimos as principais dúvidas para facilitar o primeiro contato. Se preferir, fale diretamente pelo WhatsApp.',
+    'Veja como pedir um orçamento e combinar o atendimento.',
   helperCtaLabel: 'Tirar dúvida pelo WhatsApp',
 };
 
@@ -24,13 +24,13 @@ export const faqItems: FaqItem[] = [
     id: 'como-solicitar-orcamento',
     question: 'Como posso solicitar um orçamento?',
     answer:
-      'Basta clicar em qualquer botão de WhatsApp nesta página e contar brevemente o que você precisa para o seu jardim. Se puder, envie fotos ou uma breve descrição do espaço para agilizarmos o atendimento.',
+      'Toque em “Pedir meu orçamento” e conte o que seu jardim precisa. Se puder, envie também fotos do espaço.',
   },
   {
     id: 'quais-servicos',
     question: 'Quais serviços estão disponíveis?',
     answer:
-      'Trabalhamos com cuidados de jardinagem, manutenção de jardins, poda, plantio, limpeza de áreas verdes e paisagismo. Pelo WhatsApp, confirmamos rapidamente a melhor solução para o seu tipo de espaço.',
+      'Trabalhamos com cuidados de jardinagem, manutenção de jardins, poda, plantio, limpeza de áreas verdes e paisagismo. Conte ao Fábio como você usa o espaço para ajustar o serviço às suas necessidades.',
     needsConfirmation: true,
   },
   {
@@ -44,7 +44,7 @@ export const faqItems: FaqItem[] = [
     id: 'regioes-atendidas',
     question: 'Em quais regiões vocês atendem?',
     answer:
-      'A área de atendimento é confirmada conforme a localização do seu espaço. Envie seu bairro ou cidade pelo WhatsApp para verificarmos rapidamente a disponibilidade na sua região.',
+      'A área de atendimento é confirmada conforme a localização do seu espaço. Envie seu bairro ou cidade pelo WhatsApp para o Fábio confirmar se atende na sua região.',
     needsConfirmation: true,
   },
 ];

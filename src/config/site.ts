@@ -8,12 +8,12 @@
  * - Não adicione dados fictícios (endereço, telefone, cidade ou redes inexistentes).
  */
 
-import heroDesktopImage from '@/assets/images/hero/hero-garden-desktop.svg';
-import heroMobileImage from '@/assets/images/hero/hero-garden-mobile.svg';
-import aboutMainImage from '@/assets/images/about/about-main.svg';
-import aboutDetailImage from '@/assets/images/about/about-detail.svg';
-import whyFeatureImage from '@/assets/images/why-choose-us/why-feature.svg';
-import ctaBackdropImage from '@/assets/images/hero/cta-backdrop.svg';
+import heroDesktopImage from '@/assets/images/hero/hero-garden-desktop.jpg';
+import heroMobileImage from '@/assets/images/hero/hero-garden-mobile.jpg';
+import aboutMainImage from '@/assets/images/about/about-main.jpg';
+import aboutDetailImage from '@/assets/images/about/about-detail.jpg';
+import whyFeatureImage from '@/assets/images/why-choose-us/why-feature.jpg';
+import ctaBackdropImage from '@/assets/images/hero/cta-backdrop.jpg';
 
 export interface NavItem {
   label: string;
@@ -53,9 +53,9 @@ export const siteConfig = {
      * Exemplo futuro: "https://fabiojardinagem.com.br"
      */
     siteUrl: (import.meta.env.SITE || '').trim(),
-    title: 'Fábio Jardinagem & Paisagismo | Cuidado, Manutenção e Paisagismo',
+    title: 'Fábio Jardinagem & Paisagismo | Manutenção, Poda e Plantio',
     description:
-      'Serviços de jardinagem, manutenção de jardins, poda, plantio e paisagismo. Solicite seu orçamento diretamente pelo WhatsApp.',
+      'Deixe seu jardim mais bonito com serviços de manutenção, poda, plantio e paisagismo. Converse com Fábio e peça um orçamento pelo WhatsApp.',
     locale: 'pt_BR',
     /** Opcional: caminho público da imagem Open Graph (ex.: "/branding/og-cover.jpg") */
     ogImage: '',
@@ -72,44 +72,38 @@ export const siteConfig = {
     { label: 'Início', href: '#inicio' },
     { label: 'Serviços', href: '#servicos' },
     { label: 'Sobre', href: '#sobre' },
-    { label: 'Projetos', href: '#projetos' },
+    { label: 'Galeria', href: '#projetos' },
     { label: 'Contato', href: '#contato' },
   ] satisfies NavItem[],
 
   whatsappMessages: {
     header: 'Olá, Fábio! Vim pelo site e gostaria de solicitar um orçamento.',
-    hero: 'Olá, Fábio! Gostaria de solicitar um orçamento para cuidar do meu jardim.',
+    hero: 'Olá, Fábio! Vi seu site e gostaria de solicitar um orçamento de jardinagem.',
     about: 'Olá, Fábio! Gostaria de conversar sobre um atendimento para o meu espaço verde.',
     whyChooseUs: 'Olá, Fábio! Gostaria de saber mais sobre seus serviços de jardinagem e paisagismo.',
-    ctaFinal: 'Olá, Fábio! Gostaria de solicitar um orçamento para o meu jardim.',
+    ctaFinal: 'Olá, Fábio! Quero cuidar melhor do meu jardim e gostaria de solicitar um orçamento.',
     footer: 'Olá, Fábio! Vim pelo site e gostaria de falar com você.',
     floating: 'Olá, Fábio! Gostaria de pedir um orçamento pelo WhatsApp.',
     service: (serviceTitle: string) =>
-      `Olá, Fábio! Gostaria de solicitar um orçamento para ${serviceTitle.toLowerCase()}.`,
-    portfolio: (projectTitle: string) =>
-      `Olá, Fábio! Vi o espaço "${projectTitle}" no site e gostaria de um orçamento para algo semelhante.`,
+      `Olá, Fábio! Tenho interesse no serviço de ${serviceTitle.toLowerCase()}. Podemos conversar sobre um orçamento?`,
+    portfolio: 'Olá, Fábio! Gostaria de conversar sobre um serviço de jardinagem/paisagismo para meu espaço.',
   },
 
   /** Conteúdo textual editável das seções institucionais */
   sections: {
     hero: {
       eyebrow: 'Jardinagem & Paisagismo',
-      titleStart: 'Seu jardim bonito,',
-      titleAccent: 'cuidado',
-      titleEnd: 'e cheio de vida.',
+      titleStart: 'Seu jardim bem cuidado,',
+      titleAccent: 'em cada detalhe.',
       description:
-        'Cuidado, manutenção e paisagismo para transformar e valorizar seus espaços verdes.',
-      primaryCta: 'Solicitar orçamento',
-      secondaryCta: 'Conhecer serviços',
-      noteLabel: 'Atendimento personalizado',
-      noteText: 'Cuidado sob medida para jardins e áreas verdes',
-      desktopImage: heroDesktopImage,
-      mobileImage: heroMobileImage,
-      desktopAlt: 'Espaço reservado para fotografia real de jardim cuidado em destaque',
-      mobileAlt: 'Espaço reservado para fotografia vertical de jardim em destaque',
-      desktopObjectPosition: 'center center',
-      mobileObjectPosition: 'center center',
-      isPlaceholder: true,
+        'Manutenção, poda, plantio e paisagismo para deixar seu espaço mais bonito e agradável.',
+      primaryCta: 'Pedir meu orçamento',
+      secondaryCta: 'Conhecer os serviços',
+      heroDesktop: heroDesktopImage,
+      heroMobile: heroMobileImage,
+      focalPointDesktop: '62% 52%',
+      focalPointMobile: '58% 54%',
+      alt: 'Jardim residencial com gramado, arbustos aparados e canteiros ao redor de um caminho curvo',
     },
 
     highlights: [
@@ -132,95 +126,87 @@ export const siteConfig = {
 
     about: {
       eyebrow: 'Sobre nós',
-      titleStart: 'Mais cuidado e vida para cada',
-      titleAccent: 'espaço verde.',
-      /** Textos provisórios editáveis até receber a história definitiva do Fábio */
+      titleStart: 'Cada jardim tem seu jeito.',
+      titleAccent: 'E merece um cuidado especial.',
       paragraphs: [
-        'Acreditamos que um jardim bem cuidado transforma o ambiente. Nosso trabalho é oferecer soluções de jardinagem e paisagismo com atenção aos detalhes e às necessidades de cada espaço.',
-        'Atendemos de forma próxima e transparente, entendendo o que o seu jardim precisa para se manter saudável, harmonioso e acolhedor no dia a dia.',
+        'Você conversa diretamente com o Fábio para contar como usa seu jardim e o que gostaria de melhorar.',
+        'O cuidado leva em conta as plantas que já estão no espaço e a rotina de quem aproveita o jardim.',
       ],
       pillars: [
-        'Atenção individual para cada ambiente',
-        'Respeito às plantas e ao acabamento do espaço',
+        'Cuidados adequados à luz e às plantas do local',
+        'Atenção ao acabamento de canteiros e gramados',
         'Comunicação direta do orçamento à conclusão',
       ],
       ctaLabel: 'Conversar pelo WhatsApp',
       mainImage: aboutMainImage,
-      mainAlt: 'Espaço reservado para fotografia real do Fábio cuidando de um jardim',
-      mainObjectPosition: 'center center',
+      mainAlt: 'Caminho de jardim sombreado por uma árvore e cercado de arbustos floridos',
+      mainObjectPosition: '54% 50%',
       secondaryImage: aboutDetailImage,
-      secondaryAlt: 'Espaço reservado para fotografia complementar de detalhe botânico',
+      secondaryAlt: 'Folhas largas em tons de verde vistas de perto',
       secondaryObjectPosition: 'center center',
-      isPlaceholder: true,
     },
 
     whyChooseUs: {
       eyebrow: 'Por que escolher nosso trabalho',
-      titleStart: 'Cuidado verdadeiro em cada',
-      titleAccent: 'detalhe',
-      titleEnd: 'do seu jardim.',
-      description:
-        'Unimos olhar cuidadoso, respeito pela natureza e atendimento próximo para que você aproveite um espaço sempre bonito e bem mantido.',
+      titleStart: 'Seu espaço bem cuidado,',
+      titleAccent: 'do jeito que merece.',
       ctaLabel: 'Solicitar orçamento',
       image: whyFeatureImage,
-      alt: 'Espaço reservado para fotografia ampla de jardim cuidado',
+      alt: 'Gramado contornado por canteiros, cercas baixas e árvores',
       objectPosition: 'center center',
-      isPlaceholder: true,
       cards: [
         {
           icon: 'eye',
           title: 'Atenção aos detalhes',
-          description: 'Cuidado com o corte, a limpeza e a harmonia visual de cada canteiro.',
+          description: 'Bordas aparadas, canteiros organizados e atenção ao acabamento.',
         },
         {
           icon: 'handshake',
           title: 'Atendimento próximo',
-          description: 'Alinhamento simples e transparente para atender exatamente o que você precisa.',
+          description: 'Trate o orçamento e os detalhes do serviço diretamente com o Fábio.',
         },
         {
           icon: 'leaf',
           title: 'Cuidado com seu espaço',
-          description: 'Trabalho organizado, respeitoso com o ambiente e focado na saúde das plantas.',
+          description: 'O corte, a poda e o plantio respeitam as necessidades de cada espécie.',
         },
       ] as const,
     },
 
     process: {
       eyebrow: 'Como funciona',
-      titleStart: 'Simples do primeiro contato ao',
-      titleAccent: 'cuidado final.',
-      description: 'Um caminho direto e sem burocracia para cuidar do seu espaço verde.',
+      titleStart: 'Do orçamento ao',
+      titleAccent: 'atendimento.',
       steps: [
         {
           number: '01',
           icon: 'message-square',
           title: 'Entre em contato',
-          description: 'Converse pelo WhatsApp e conte o que você precisa.',
+          description: 'Conte pelo WhatsApp o que precisa. Se puder, envie fotos do espaço.',
         },
         {
           number: '02',
           icon: 'clipboard-list',
           title: 'Avaliamos sua necessidade',
-          description: 'Alinhamos o serviço e as informações necessárias para o orçamento.',
+          description: 'O Fábio reúne as informações do jardim para preparar o orçamento.',
         },
         {
           number: '03',
           icon: 'calendar-check',
           title: 'Combinamos o atendimento',
-          description: 'Definimos os próximos passos diretamente com você.',
+          description: 'Depois de aprovar o orçamento, combine o atendimento com o Fábio.',
         },
       ] as const,
     },
 
     ctaFinal: {
       eyebrow: 'Orçamento pelo WhatsApp',
-      titleStart: 'Vamos cuidar do seu',
-      titleAccent: 'jardim?',
+      titleStart: 'Seu jardim pode ficar',
+      titleAccent: 'ainda mais bonito.',
       description:
-        'Fale diretamente com a gente e conte o que você precisa. Será um prazer conhecer seu espaço.',
-      buttonLabel: 'Pedir orçamento pelo WhatsApp',
+        'Conte o que seu jardim precisa e converse diretamente com o Fábio pelo WhatsApp.',
+      buttonLabel: 'Conversar sobre meu jardim',
       backdropImage: ctaBackdropImage,
-      backdropAlt: '',
     },
   },
 };

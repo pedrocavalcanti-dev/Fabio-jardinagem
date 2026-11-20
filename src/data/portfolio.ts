@@ -1,12 +1,10 @@
 import type { ImageMetadata } from 'astro';
-import projeto01 from '@/assets/images/portfolio/projeto-01.svg';
-import projeto02 from '@/assets/images/portfolio/projeto-02.svg';
-import projeto03 from '@/assets/images/portfolio/projeto-03.svg';
-import projeto04 from '@/assets/images/portfolio/projeto-04.svg';
-import projeto05 from '@/assets/images/portfolio/projeto-05.svg';
-import projeto06 from '@/assets/images/portfolio/projeto-06.svg';
-
-export type PortfolioOrientation = 'portrait' | 'landscape' | 'square';
+import projeto01 from '@/assets/images/portfolio/projeto-01.jpg';
+import projeto02 from '@/assets/images/portfolio/projeto-02.jpg';
+import projeto03 from '@/assets/images/portfolio/projeto-03.jpg';
+import projeto04 from '@/assets/images/portfolio/projeto-04.jpg';
+import projeto05 from '@/assets/images/portfolio/projeto-05.jpg';
+import projeto06 from '@/assets/images/portfolio/projeto-06.jpg';
 
 export interface PortfolioItem {
   id: string;
@@ -15,10 +13,8 @@ export interface PortfolioItem {
   caption: string;
   image: ImageMetadata;
   alt: string;
-  orientation: PortfolioOrientation;
   objectPosition?: string;
-  /** Marque como false ao substituir pelo registro real do trabalho */
-  isPlaceholder?: boolean;
+  isOwnWork: boolean;
 }
 
 export interface BeforeAfterPair {
@@ -32,95 +28,83 @@ export interface BeforeAfterPair {
 }
 
 export const portfolioContent = {
-  eyebrow: 'Galeria & Projetos',
-  titleStart: 'Veja nosso trabalho de',
-  titleAccent: 'perto.',
-  description: 'Alguns dos jardins e espaços que recebem cuidado e atenção.',
-  placeholderNotice:
-    'Espaço preparado para as fotografias reais dos trabalhos realizados. Clique em qualquer card para testar a visualização ampliada.',
-  /**
-   * Os filtros por categoria são exibidos automaticamente apenas quando houver
-   * fotografias reais cadastradas em 2 ou mais categorias (ou definindo true manualmente).
-   */
-  forceShowFilters: false,
+  illustrative: {
+    eyebrow: 'Inspiração para o seu jardim',
+    titleStart: 'Ideias para espaços verdes',
+    titleAccent: 'bem cuidados.',
+    description: 'Fotografias ilustrativas de jardins, gramados e canteiros.',
+  },
+  ownWork: {
+    eyebrow: 'Projetos',
+    titleStart: 'Veja nosso trabalho de',
+    titleAccent: 'perto.',
+    description: 'Conheça alguns dos espaços cuidados pelo Fábio.',
+  },
 };
 
-/**
- * Adicione novas fotografias aqui sem precisar editar o layout da seção.
- * Ao trocar pelos arquivos reais em `src/assets/images/portfolio/`, altere `isPlaceholder: false`.
- */
+// Marque isOwnWork como true apenas para registros de serviços realizados pelo Fábio.
 export const portfolioItems: PortfolioItem[] = [
   {
     id: 'espaco-01',
     title: 'Jardim residencial',
-    category: 'Manutenção',
-    caption: 'Espaço reservado para fotografia vertical de jardim mantido e cuidado.',
+    category: 'Paisagismo',
+    caption: 'Uma árvore alta cria sombra junto ao gramado e à área de convivência.',
     image: projeto01,
-    alt: 'Placeholder visual reservado para fotografia vertical de jardim residencial',
-    orientation: 'portrait',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Árvore em um gramado ao lado de uma casa contemporânea',
+    objectPosition: '55% 62%',
+    isOwnWork: false,
   },
   {
     id: 'espaco-02',
-    title: 'Área verde e gramado',
+    title: 'Gramado e arbustos',
     category: 'Manutenção',
-    caption: 'Espaço reservado para fotografia horizontal de gramado e acabamento.',
+    caption: 'Arbustos aparados contornam o gramado e definem os limites do jardim.',
     image: projeto02,
-    alt: 'Placeholder visual reservado para fotografia horizontal de área verde e gramado',
-    orientation: 'landscape',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Gramado verde cercado por sebes e arbustos aparados',
+    objectPosition: '52% 72%',
+    isOwnWork: false,
   },
   {
     id: 'espaco-03',
-    title: 'Canteiros e folhagens',
-    category: 'Paisagismo',
-    caption: 'Espaço reservado para fotografia vertical de composição de folhagens.',
+    title: 'Cercas vivas',
+    category: 'Poda e cuidados',
+    caption: 'A poda dá forma às sebes e mantém o caminho livre.',
     image: projeto03,
-    alt: 'Placeholder visual reservado para fotografia vertical de canteiros e folhagens',
-    orientation: 'portrait',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Caminho estreito entre cercas vivas verdes aparadas',
+    objectPosition: '52% 58%',
+    isOwnWork: false,
   },
   {
     id: 'espaco-04',
-    title: 'Revitalização de jardim',
-    category: 'Revitalização',
-    caption: 'Espaço reservado para fotografia horizontal de área revitalizada.',
+    title: 'Caminhos no jardim',
+    category: 'Paisagismo',
+    caption: 'Pisos e folhagens conectam o gramado à varanda.',
     image: projeto04,
-    alt: 'Placeholder visual reservado para fotografia horizontal de revitalização de jardim',
-    orientation: 'landscape',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Caminho de pedra com folhagens nas laterais levando a uma varanda',
+    objectPosition: '50% 56%',
+    isOwnWork: false,
   },
   {
     id: 'espaco-05',
-    title: 'Detalhes de poda',
-    category: 'Poda e cuidados',
-    caption: 'Espaço reservado para registro aproximado de poda e acabamento.',
+    title: 'Canteiros bem definidos',
+    category: 'Manutenção',
+    caption: 'Canteiros arredondados e caminhos organizam a circulação entre as plantas.',
     image: projeto05,
-    alt: 'Placeholder visual reservado para fotografia de detalhes de poda',
-    orientation: 'square',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Jardim com arbustos arredondados, árvores e caminhos sinuosos',
+    objectPosition: '58% 55%',
+    isOwnWork: false,
   },
   {
     id: 'espaco-06',
-    title: 'Área externa completa',
-    category: 'Paisagismo',
-    caption: 'Espaço reservado para fotografia ampla de área externa após o atendimento.',
+    title: 'Vasos e folhagens',
+    category: 'Plantio',
+    caption: 'Vasos em diferentes alturas acompanham o acesso à casa.',
     image: projeto06,
-    alt: 'Placeholder visual reservado para fotografia ampla de área externa',
-    orientation: 'landscape',
-    objectPosition: 'center center',
-    isPlaceholder: true,
+    alt: 'Caminho de piso avermelhado ladeado por vasos e folhagens',
+    objectPosition: '52% 58%',
+    isOwnWork: false,
   },
 ];
 
-/**
- * Pares reais de Antes e Depois (vazio por padrão — NÃO inventar transformações).
- * Quando houver pares reais fotografados, basta preenchê-los aqui para ativar
- * automaticamente o componente comparativo na seção de Portfólio.
- */
+// Preencha somente com pares de antes e depois de trabalhos próprios.
 export const beforeAfterPairs: BeforeAfterPair[] = [];

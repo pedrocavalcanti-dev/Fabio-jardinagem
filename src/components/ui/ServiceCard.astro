@@ -10,7 +10,7 @@ interface Props {
   ctaLabel?: string;
 }
 
-const { service, ctaLabel = 'Consultar serviço' } = Astro.props;
+const { service, ctaLabel = 'Quero esse serviço' } = Astro.props;
 const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(service.title);
 ---
 
@@ -20,13 +20,11 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
       src={service.image}
       alt={service.alt}
       widths={[420, 640, 840]}
-      sizes="(max-width: 640px) 84vw, (max-width: 1024px) 46vw, 380px"
+      sizes="(max-width: 639px) 83vw, (max-width: 1023px) 46vw, 385px"
       objectPosition={service.objectPosition ?? 'center center'}
       class="service-card__img"
     />
     <div class="service-card__scrim" aria-hidden="true"></div>
-
-    {service.isPlaceholder && <span class="photo-placeholder-badge">Espaço para foto real</span>}
 
     <span class="service-card__icon" aria-hidden="true">
       {service.icon === 'sprout' && <Sprout size={18} stroke-width={2} />}
@@ -46,7 +44,7 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
         label={ctaLabel}
         variant="surface"
         size="sm"
-        icon="arrow"
+        icon="whatsapp"
         ariaLabel={`${ctaLabel}: ${service.title} pelo WhatsApp`}
       />
     </div>
@@ -58,8 +56,7 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    min-height: 410px;
+    height: 100%;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background-color: var(--color-forest);
@@ -77,9 +74,10 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
   }
 
   .service-card__media {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
+    position: relative;
+    aspect-ratio: 5 / 3;
+    flex-shrink: 0;
+    overflow: hidden;
   }
 
   .service-card__img {
@@ -93,13 +91,7 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
   .service-card__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(11, 34, 26, 0.08) 0%,
-      rgba(11, 34, 26, 0.25) 42%,
-      rgba(11, 34, 26, 0.88) 82%,
-      rgba(11, 34, 26, 0.96) 100%
-    );
+    background: linear-gradient(0deg, rgba(11, 34, 26, 0.3), transparent 42%);
   }
 
   .service-card__icon {
@@ -123,8 +115,9 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
     z-index: 2;
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: var(--space-3);
-    padding: var(--space-6);
+    padding: clamp(1rem, 3vw, 1.5rem);
     color: var(--color-surface);
   }
 
@@ -140,19 +133,11 @@ const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(s
     font-size: var(--text-sm);
     line-height: 1.55;
     color: rgba(255, 255, 255, 0.84);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
   .service-card__action {
+    margin-top: auto;
     padding-top: var(--space-2);
   }
 
-  @media (min-width: 768px) {
-    .service-card {
-      min-height: 440px;
-    }
-  }
 </style>

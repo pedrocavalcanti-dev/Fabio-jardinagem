@@ -9,6 +9,8 @@ import '@fontsource/cormorant-garamond/600-italic.css';
 import '@/styles/tokens.css';
 import '@/styles/global.css';
 
+import { getImage } from 'astro:assets';
+
 import { getSanitizedWhatsAppNumber, isWhatsAppConfigured, siteConfig } from '@/config/site';
 
 interface Props {
@@ -20,10 +22,15 @@ const { title = siteConfig.seo.title, description = siteConfig.seo.description }
 
 const canonicalBase = siteConfig.seo.siteUrl;
 const canonicalUrl = canonicalBase ? new URL(Astro.url.pathname, canonicalBase).toString() : null;
-const ogImageUrl =
-  canonicalBase && siteConfig.seo.ogImage
-    ? new URL(siteConfig.seo.ogImage, canonicalBase).toString()
-    : null;
+const ogImage = siteConfig.seo.ogImage || (await getImage({
+  src: siteConfig.sections.hero.heroDesktop,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+  quality: 75,
+})).src;
+const ogImageUrl = canonicalBase ? new URL(ogImage, canonicalBase).toString() : ogImage;
 
 /**
  * Dados estruturados (Schema.org) contendo exclusivamente informações verificadas.
@@ -70,11 +77,12 @@ if (siteConfig.contact.instagramUrl) {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta property="og:image" content={ogImageUrl} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- JSON-LD apenas com dados reais configurados -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

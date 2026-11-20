@@ -1,4 +1,4 @@
-# Fábio Jardinagem & Paisagismo — Landing Page (Fase 1)
+# Fábio Jardinagem & Paisagismo — Landing Page (versão 1.1)
 
 Landing page institucional, estática, responsiva (Mobile First) e orientada à conversão pelo WhatsApp, desenvolvida em **Astro (SSG) + TypeScript + CSS moderno**.
 
@@ -34,7 +34,7 @@ src/
       hero/                  # Fotos principais do hero (desktop e mobile) + fundo CTA
       about/                 # Fotos do profissional / espaço (seção Sobre)
       services/              # Fotos dos cards de serviços
-      portfolio/             # Fotografias reais da galeria de projetos
+      portfolio/             # Fotografias da galeria de inspiração ou de projetos
       why-choose-us/         # Fotografia ampla da seção de diferenciais
   components/
     layout/                  # Header, Footer e ações flutuantes (mobile/desktop)
@@ -85,35 +85,14 @@ contact: {
 
 ---
 
-## Como substituir as imagens provisórias por fotos reais
+## Como inserir fotos do Fábio
 
-Atualmente o site utiliza **placeholders visuais locais** em `src/assets/images/` para preservar o layout sem quebrar imagens nem exibir trabalhos fictícios.
+Veja a licença e a autoria das fotos ilustrativas atuais em [FOTOGRAFIAS.md](FOTOGRAFIAS.md). Mantenha os arquivos locais em `src/assets/images/` para o Astro gerar versões responsivas.
 
-Para inserir as fotografias reais (preferencialmente `.jpg`, `.jpeg`, `.png` ou `.webp` de boa resolução — o Astro otimiza automaticamente para **WebP** responsivo no build):
-
-1. **Hero (`src/assets/images/hero/`)**
-   - Adicione a foto horizontal (ex.: `hero-desktop.jpg`, ~1600px de largura) e opcionalmente uma vertical para celular (ex.: `hero-mobile.jpg`, ~900×1200px).
-   - Atualize os imports em `src/config/site.ts` (`hero.desktopImage` e `hero.mobileImage`), ajuste `desktopObjectPosition` / `mobileObjectPosition` se precisar melhorar o recorte e altere `isPlaceholder: false`.
-
-2. **Sobre (`src/assets/images/about/`)**
-   - Adicione a foto principal do Fábio/trabalho (`about-main.jpg`) e opcionalmente uma foto complementar (`about-detail.jpg`).
-   - Atualize os imports em `src/config/site.ts` (`sections.about`) e marque `isPlaceholder: false`.
-
-3. **Serviços (`src/assets/images/services/`)**
-   - Adicione uma fotografia vertical/retrato para cada serviço.
-   - Atualize os imports, títulos, descrições e `isPlaceholder: false` em `src/data/services.ts`.
-
-4. **Portfólio / Galeria (`src/assets/images/portfolio/`)**
-   - Adicione as fotos reais dos jardins atendidos nesta pasta.
-   - Cadastre ou atualize os itens em `src/data/portfolio.ts` (`orientation`: `'portrait'`, `'landscape'` ou `'square'`, legenda opcional e `isPlaceholder: false`).
-   - Quando houver **2 ou mais categorias reais**, os botões de filtro da galeria são ativados automaticamente.
-   - Se houver fotos reais de **Antes e Depois**, basta adicioná-las em `beforeAfterPairs` no mesmo arquivo para habilitar o comparativo interativo.
-
-5. **Por que escolher nosso trabalho (`src/assets/images/why-choose-us/`)**
-   - Substitua a imagem ampla em `src/config/site.ts` (`sections.whyChooseUs.image`) e marque `isPlaceholder: false`.
-
-6. **Logo definitiva (Fase 2)**
-   - A marca provisória está totalmente isolada em **`src/components/ui/BrandLogo.astro`**. Basta atualizar esse único componente (e o favicon em `public/icons/favicon.svg`).
+- **Hero** em `src/config/site.ts`: configure `heroDesktop`, `heroMobile`, `focalPointDesktop`, `focalPointMobile` e `alt`. Use uma foto ampla para desktop e um recorte vertical para celular.
+- **Sobre, diferenciais e CTA** em `src/config/site.ts`: atualize os imports e os textos alternativos das fotos informativas.
+- **Serviços** em `src/data/services.ts`: atualize o arquivo, o texto alternativo e a posição do recorte de cada foto.
+- **Galeria** em `src/data/portfolio.ts`: marque `isOwnWork: true` nos registros de trabalhos do Fábio. A galeria passa a exibir os projetos próprios e troca o título automaticamente. Com duas categorias ou mais, os filtros aparecem. O array `beforeAfterPairs` continua disponível para registros de antes e depois.
 
 ---
 
