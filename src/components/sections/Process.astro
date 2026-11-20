@@ -1,0 +1,151 @@
+---
+import { CalendarCheck, ClipboardList, MessageSquare } from '@lucide/astro';
+import { siteConfig } from '@/config/site';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+
+const { process: processSection } = siteConfig.sections;
+---
+
+<section id="como-funciona" class="section process" aria-labelledby="process-heading">
+  <div class="container">
+    <div class="process__header" data-reveal>
+      <SectionHeading
+        id="process-heading"
+        eyebrow={processSection.eyebrow}
+        titleStart={processSection.titleStart}
+        titleAccent={processSection.titleAccent}
+        description={processSection.description}
+        align="center"
+      />
+    </div>
+
+    <ol class="process__steps">
+      {
+        processSection.steps.map((step) => (
+          <li class="process__card" data-reveal>
+            <div class="process__top">
+              <span class="process__number" aria-hidden="true">
+                {step.number}
+              </span>
+              <span class="process__icon" aria-hidden="true">
+                {step.icon === 'message-square' && <MessageSquare size={20} stroke-width={1.9} />}
+                {step.icon === 'clipboard-list' && <ClipboardList size={20} stroke-width={1.9} />}
+                {step.icon === 'calendar-check' && <CalendarCheck size={20} stroke-width={1.9} />}
+              </span>
+            </div>
+
+            <h3 class="process__title">{step.title}</h3>
+            <p class="process__desc">{step.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process__header {
+    margin-bottom: var(--space-10);
+  }
+
+  .process__steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .process__card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: var(--shadow-xs);
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base),
+      border-color var(--transition-base);
+  }
+
+  .process__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--color-sage-soft);
+  }
+
+  .process__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+  }
+
+  .process__number {
+    font-family: var(--font-editorial);
+    font-style: italic;
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-natural);
+  }
+
+  .process__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--color-sage-tint);
+    color: var(--color-forest);
+  }
+
+  .process__title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-forest);
+    line-height: 1.25;
+  }
+
+  .process__desc {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+
+  @media (min-width: 768px) {
+    .process__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .process__card {
+      padding: var(--space-7, 1.75rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    /* Linha conectora sutil apenas no desktop */
+    .process__steps::before {
+      content: '';
+      position: absolute;
+      top: 48px;
+      left: 16%;
+      right: 16%;
+      height: 1px;
+      background-image: linear-gradient(
+        to right,
+        rgba(35, 84, 60, 0.28) 55%,
+        rgba(35, 84, 60, 0) 0%
+      );
+      background-size: 12px 1px;
+      background-repeat: repeat-x;
+      z-index: 0;
+    }
+  }
+</style>

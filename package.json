@@ -1,0 +1,25 @@
+{
+  "name": "fabio-jardinagem",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Landing page institucional orientada a conversão para Fábio Jardinagem & Paisagismo",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource/cormorant-garamond": "^5.2.5",
+    "@fontsource/plus-jakarta-sans": "^5.2.5",
+    "@lucide/astro": "^1.77.0",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

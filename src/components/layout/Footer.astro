@@ -1,0 +1,286 @@
+---
+import { MapPin } from '@lucide/astro';
+import { isWhatsAppConfigured, siteConfig } from '@/config/site';
+import BrandLogo from '@/components/ui/BrandLogo.astro';
+import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
+
+const currentYear = new Date().getFullYear();
+const whatsappConfigured = isWhatsAppConfigured();
+const { contact, brand, navigation, credits } = siteConfig;
+---
+
+<footer id="contato" class="site-footer on-dark">
+  <div class="container">
+    <div class="site-footer__grid">
+      <!-- Marca e resumo -->
+      <div class="site-footer__brand">
+        <BrandLogo variant="light" />
+        <p class="site-footer__desc">{brand.description}</p>
+        <div class="site-footer__cta">
+          <WhatsAppButton
+            message={siteConfig.whatsappMessages.footer}
+            label="Falar pelo WhatsApp"
+            variant="lime"
+            size="md"
+            icon="both"
+          />
+        </div>
+      </div>
+
+      <!-- Navegação -->
+      <nav class="site-footer__col" aria-label="Links do rodapé">
+        <h2 class="site-footer__heading">Navegação</h2>
+        <ul class="site-footer__list">
+          {
+            navigation.map((item) => (
+              <li>
+                <a href={item.href} class="site-footer__link">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href="#duvidas" class="site-footer__link">Perguntas frequentes</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Contato direto -->
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Atendimento</h2>
+        <ul class="site-footer__info">
+          <li>
+            <span class="site-footer__label">WhatsApp</span>
+            {
+              whatsappConfigured ? (
+                <span class="site-footer__value">
+                  {contact.whatsappDisplay || 'Atendimento direto pelo botão ao lado'}
+                </span>
+              ) : (
+                <span class="site-footer__pending">
+                  Número oficial em configuração (<code>src/config/site.ts</code>)
+                </span>
+              )
+            }
+          </li>
+
+          {
+            contact.instagramUrl && (
+              <li>
+                <span class="site-footer__label">Instagram</span>
+                <a
+                  href={contact.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="site-footer__social-link"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                  <span>{contact.instagramHandle || 'Acessar Instagram'}</span>
+                </a>
+              </li>
+            )
+          }
+
+          {
+            contact.serviceRegion && (
+              <li>
+                <span class="site-footer__label">Região atendida</span>
+                <span class="site-footer__region">
+                  <MapPin size={16} aria-hidden="true" />
+                  <span>{contact.serviceRegion}</span>
+                </span>
+              </li>
+            )
+          }
+
+          {
+            contact.businessHours && (
+              <li>
+                <span class="site-footer__label">Horário</span>
+                <span class="site-footer__value">{contact.businessHours}</span>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__copy">
+        © {currentYear} {brand.name}. Todos os direitos reservados.
+      </p>
+
+      {
+        credits.name && (
+          <p class="site-footer__credit">
+            {credits.label}{' '}
+            {credits.url ? (
+              <a href={credits.url} target="_blank" rel="noopener noreferrer">
+                {credits.name}
+              </a>
+            ) : (
+              credits.name
+            )}
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--color-forest);
+    color: var(--color-surface);
+    padding-top: clamp(3.5rem, 6vw, 5.5rem);
+    /* Espaço seguro extra no mobile para não ser encoberto pela barra inferior */
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    scroll-margin-top: var(--header-height);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-10);
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-border-inverse);
+  }
+
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    max-width: 380px;
+  }
+
+  .site-footer__desc {
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--color-text-inverse-soft);
+  }
+
+  .site-footer__cta {
+    padding-top: var(--space-2);
+  }
+
+  .site-footer__heading {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-lime);
+    margin-bottom: var(--space-4);
+  }
+
+  .site-footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .site-footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    font-size: var(--text-sm);
+    color: var(--color-text-inverse-soft);
+    transition: color var(--transition-fast);
+  }
+
+  .site-footer__link:hover {
+    color: var(--color-lime);
+  }
+
+  .site-footer__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .site-footer__info li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .site-footer__label {
+    font-size: var(--text-xs);
+    color: var(--color-text-inverse-muted);
+  }
+
+  .site-footer__value,
+  .site-footer__region,
+  .site-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-surface);
+  }
+
+  .site-footer__social-link:hover {
+    color: var(--color-lime);
+  }
+
+  .site-footer__pending {
+    font-size: var(--text-xs);
+    color: var(--color-text-inverse-soft);
+    line-height: 1.5;
+  }
+
+  .site-footer__pending code {
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-lime);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: var(--space-6);
+    font-size: var(--text-xs);
+    color: var(--color-text-inverse-muted);
+  }
+
+  .site-footer__credit a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 0.8fr 1fr;
+      gap: var(--space-12);
+    }
+
+    .site-footer__bottom {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer {
+      padding-bottom: var(--space-10);
+    }
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+
+interface Props {
+  href?: string;
+  variant?: 'lime' | 'primary' | 'outline-dark' | 'outline-light' | 'surface';
+  size?: 'sm' | 'md' | 'lg';
+  showArrow?: boolean;
+  class?: string;
+  ariaLabel?: string;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  showArrow = false,
+  class: className,
+  ariaLabel,
+  type = 'button',
+} = Astro.props;
+
+const classes = ['btn', `btn--${variant}`, size !== 'md' && `btn--${size}`, className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} aria-label={ariaLabel}>
+      <span>
+        <slot />
+      </span>
+      {showArrow && (
+        <span class="btn__circle" aria-hidden="true">
+          <ArrowUpRight size={15} stroke-width={2.2} />
+        </span>
+      )}
+    </a>
+  ) : (
+    <button type={type} class:list={classes} aria-label={ariaLabel}>
+      <span>
+        <slot />
+      </span>
+      {showArrow && (
+        <span class="btn__circle" aria-hidden="true">
+          <ArrowUpRight size={15} stroke-width={2.2} />
+        </span>
+      )}
+    </button>
+  )
+}

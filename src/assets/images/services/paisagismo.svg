@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 920" width="720" height="920" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-srv-2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#245940"/>
+      <stop offset="52%" stop-color="#18402E"/>
+      <stop offset="100%" stop-color="#0F2B21"/>
+    </linearGradient>
+    <radialGradient id="sun-srv-2" cx="28%" cy="24%" r="58%">
+      <stop offset="0%" stop-color="#C5F27A" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#C5F27A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#C5F27A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mist-srv-2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B221A" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0B221A" stop-opacity="0.34"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="920" fill="url(#bg-srv-2)"/>
+  <rect width="720" height="920" fill="url(#sun-srv-2)"/>
+  
+      <!-- Layered manicured hedges and garden walkway -->
+      <path d="M0 533.5999999999999 Q 216 441.59999999999997, 446.4 506.00000000000006 T 720 423.20000000000005 L 720 920 L 0 920 Z" fill="#24583F"/>
+      <path d="M0 644 Q 259.2 570.4, 518.4 634.8 T 720 588.8000000000001 L 720 920 L 0 920 Z" fill="#183F2E"/>
+      <!-- Garden stone path perspective -->
+      <path d="M331.2 607.2 Q 374.40000000000003 736, 273.6 920 L 489.6 920 Q 446.4 736, 388.8 607.2 Z" fill="#C5F27A" opacity="0.22"/>
+      <!-- Sculpted topiary spheres -->
+      <circle cx="172.79999999999998" cy="588.8000000000001" r="100.80000000000001" fill="#183F2E"/>
+      <circle cx="158.4" cy="570.4" r="86.39999999999999" fill="#C5F27A" opacity="0.16"/>
+      <circle cx="561.6" cy="552" r="115.2" fill="#0F2B21"/>
+      <circle cx="547.2" cy="533.5999999999999" r="93.60000000000001" fill="#C5F27A" opacity="0.14"/>
+      <path d="M0 791.1999999999999 Q 360 726.8000000000001, 720 809.6 L 720 920 L 0 920 Z" fill="#0F2B21"/>
+    
+  <rect width="720" height="920" fill="url(#mist-srv-2)"/>
+</svg>

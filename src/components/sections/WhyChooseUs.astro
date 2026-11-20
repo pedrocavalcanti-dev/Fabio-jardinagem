@@ -1,0 +1,179 @@
+---
+import { Eye, Handshake, Leaf } from '@lucide/astro';
+import { siteConfig } from '@/config/site';
+import ResponsivePhoto from '@/components/ui/ResponsivePhoto.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
+
+const { whyChooseUs } = siteConfig.sections;
+---
+
+<section class="section why-us" aria-labelledby="why-us-heading">
+  <div class="container-wide">
+    <div class="why-us__panel on-dark">
+      <div class="why-us__inner">
+        <div data-reveal>
+          <SectionHeading
+            id="why-us-heading"
+            eyebrow={whyChooseUs.eyebrow}
+            titleStart={whyChooseUs.titleStart}
+            titleAccent={whyChooseUs.titleAccent}
+            titleEnd={whyChooseUs.titleEnd}
+            description={whyChooseUs.description}
+            align="center"
+            theme="dark"
+          />
+        </div>
+
+        <div class="why-us__showcase" data-reveal>
+          <div class="why-us__photo">
+            <ResponsivePhoto
+              src={whyChooseUs.image}
+              alt={whyChooseUs.alt}
+              widths={[640, 1024, 1400]}
+              sizes="(max-width: 1024px) 100vw, 1100px"
+              objectPosition={whyChooseUs.objectPosition}
+            />
+            {whyChooseUs.isPlaceholder && (
+              <span class="photo-placeholder-badge">Espaço para foto real em destaque</span>
+            )}
+          </div>
+
+          <ul class="why-us__cards">
+            {
+              whyChooseUs.cards.map((card) => (
+                <li class="why-us__card">
+                  <span class="why-us__card-icon" aria-hidden="true">
+                    {card.icon === 'eye' && <Eye size={20} stroke-width={1.9} />}
+                    {card.icon === 'handshake' && <Handshake size={20} stroke-width={1.9} />}
+                    {card.icon === 'leaf' && <Leaf size={20} stroke-width={1.9} />}
+                  </span>
+                  <h3 class="why-us__card-title">{card.title}</h3>
+                  <p class="why-us__card-desc">{card.description}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="why-us__cta" data-reveal>
+          <WhatsAppButton
+            message={siteConfig.whatsappMessages.whyChooseUs}
+            label={whyChooseUs.ctaLabel}
+            variant="lime"
+            size="lg"
+            icon="both"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-us {
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .why-us__panel {
+    background: linear-gradient(165deg, var(--color-forest) 0%, var(--color-forest-deep) 100%);
+    border-radius: var(--radius-xl);
+    padding: clamp(2.75rem, 6vw, 5.25rem) clamp(1.25rem, 4vw, 3.5rem);
+    box-shadow: var(--shadow-md);
+  }
+
+  .why-us__inner {
+    max-width: 1080px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .why-us__showcase {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .why-us__photo {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--color-natural);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .why-us__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .why-us__card {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-shadow: var(--shadow-md);
+  }
+
+  .why-us__card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--color-sage-tint);
+    color: var(--color-natural);
+    margin-bottom: var(--space-1);
+  }
+
+  .why-us__card-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-forest);
+    line-height: 1.25;
+  }
+
+  .why-us__card-desc {
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+  }
+
+  .why-us__cta {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-2);
+  }
+
+  @media (min-width: 768px) {
+    .why-us__panel {
+      border-radius: var(--radius-2xl);
+    }
+
+    .why-us__photo {
+      aspect-ratio: 16 / 8.6;
+    }
+
+    .why-us__cards {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+      margin-top: -4.25rem;
+      padding-inline: var(--space-5);
+      position: relative;
+      z-index: 2;
+    }
+
+    .why-us__card {
+      padding: var(--space-6);
+    }
+  }
+</style>

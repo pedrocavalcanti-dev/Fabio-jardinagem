@@ -1,0 +1,118 @@
+---
+import { siteConfig } from '@/config/site';
+import ResponsivePhoto from '@/components/ui/ResponsivePhoto.astro';
+import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
+
+const { ctaFinal } = siteConfig.sections;
+---
+
+<section class="section cta-banner" aria-labelledby="cta-final-heading">
+  <div class="container">
+    <div class="cta-banner__card on-dark" data-reveal>
+      <div class="cta-banner__bg" aria-hidden="true">
+        <ResponsivePhoto
+          src={ctaFinal.backdropImage}
+          alt={ctaFinal.backdropAlt}
+          widths={[768, 1280]}
+          sizes="(max-width: 1200px) 100vw, 1200px"
+        />
+        <div class="cta-banner__overlay"></div>
+      </div>
+
+      <div class="cta-banner__content">
+        <p class="eyebrow eyebrow--light">{ctaFinal.eyebrow}</p>
+
+        <h2 id="cta-final-heading" class="cta-banner__title">
+          {ctaFinal.titleStart}{' '}
+          <span class="editorial-accent cta-banner__accent">{ctaFinal.titleAccent}</span>
+        </h2>
+
+        <p class="cta-banner__desc">{ctaFinal.description}</p>
+
+        <div class="cta-banner__action">
+          <WhatsAppButton
+            message={siteConfig.whatsappMessages.ctaFinal}
+            label={ctaFinal.buttonLabel}
+            variant="lime"
+            size="lg"
+            icon="both"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-banner {
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .cta-banner__card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--color-forest);
+    padding: clamp(2.75rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+    box-shadow: var(--shadow-md);
+    isolation: isolate;
+  }
+
+  .cta-banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .cta-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(11, 34, 26, 0.92) 0%,
+      rgba(16, 47, 37, 0.82) 55%,
+      rgba(35, 84, 60, 0.72) 100%
+    );
+  }
+
+  .cta-banner__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .cta-banner__title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--color-surface);
+    text-wrap: balance;
+  }
+
+  .cta-banner__accent {
+    color: var(--color-lime);
+    font-weight: 500;
+  }
+
+  .cta-banner__desc {
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 48ch;
+  }
+
+  .cta-banner__action {
+    padding-top: var(--space-3);
+  }
+
+  @media (min-width: 768px) {
+    .cta-banner__card {
+      border-radius: var(--radius-2xl);
+    }
+  }
+</style>

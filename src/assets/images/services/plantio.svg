@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 920" width="720" height="920" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-srv-4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2C6146"/>
+      <stop offset="52%" stop-color="#1D4834"/>
+      <stop offset="100%" stop-color="#102F25"/>
+    </linearGradient>
+    <radialGradient id="sun-srv-4" cx="40%" cy="20%" r="58%">
+      <stop offset="0%" stop-color="#C5F27A" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#C5F27A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#C5F27A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mist-srv-4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B221A" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0B221A" stop-opacity="0.34"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="920" fill="url(#bg-srv-4)"/>
+  <rect width="720" height="920" fill="url(#sun-srv-4)"/>
+  
+      <!-- Architectural garden wall & planter silhouette -->
+      <rect x="0" y="570.4" width="720" height="349.6" fill="#183F2E"/>
+      <path d="M0 588.8000000000001 Q 201.60000000000002 460, 417.59999999999997 533.5999999999999 T 720 478.40000000000003 L 720 920 L 0 920 Z" fill="#24583F"/>
+      <!-- Planter arch silhouette -->
+      <path d="M115.2 699.2 Q 360 588.8000000000001, 604.8 699.2 L 604.8 920 L 115.2 920 Z" fill="#0F2B21"/>
+      <!-- Soft shrubs -->
+      <ellipse cx="230.4" cy="515.2" rx="129.6" ry="110.39999999999999" fill="#183F2E"/>
+      <ellipse cx="475.20000000000005" cy="478.40000000000003" rx="158.4" ry="128.8" fill="#24583F"/>
+      <ellipse cx="360" cy="552" rx="144" ry="101.2" fill="#C5F27A" opacity="0.18"/>
+      <!-- Vertical botanical stems -->
+      <g stroke="#C5F27A" stroke-width="2.5" stroke-linecap="round" opacity="0.35">
+        <line x1="187.20000000000002" y1="662.4" x2="158.4" y2="331.2"/>
+        <line x1="230.4" y1="662.4" x2="251.99999999999997" y2="294.40000000000003"/>
+        <line x1="518.4" y1="662.4" x2="547.2" y2="257.6"/>
+        <line x1="475.20000000000005" y1="662.4" x2="446.4" y2="349.6"/>
+      </g>
+    
+  <rect width="720" height="920" fill="url(#mist-srv-4)"/>
+</svg>

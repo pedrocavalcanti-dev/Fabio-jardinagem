@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-port-3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#336D50"/>
+      <stop offset="52%" stop-color="#22523B"/>
+      <stop offset="100%" stop-color="#123326"/>
+    </linearGradient>
+    <radialGradient id="sun-port-3" cx="60%" cy="24%" r="58%">
+      <stop offset="0%" stop-color="#C5F27A" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#C5F27A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#C5F27A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mist-port-3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B221A" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0B221A" stop-opacity="0.34"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg-port-3)"/>
+  <rect width="800" height="1000" fill="url(#sun-port-3)"/>
+  
+      <!-- Architectural garden wall & planter silhouette -->
+      <rect x="0" y="620" width="800" height="380" fill="#173E2D"/>
+      <path d="M0 640 Q 224.00000000000003 500, 463.99999999999994 580 T 800 520 L 800 1000 L 0 1000 Z" fill="#23543C"/>
+      <!-- Planter arch silhouette -->
+      <path d="M128 760 Q 400 640, 672 760 L 672 1000 L 128 1000 Z" fill="#0E291F"/>
+      <!-- Soft shrubs -->
+      <ellipse cx="256" cy="560" rx="144" ry="120" fill="#173E2D"/>
+      <ellipse cx="528" cy="520" rx="176" ry="140" fill="#23543C"/>
+      <ellipse cx="400" cy="600" rx="160" ry="110" fill="#EAF3E7" opacity="0.18"/>
+      <!-- Vertical botanical stems -->
+      <g stroke="#EAF3E7" stroke-width="2.5" stroke-linecap="round" opacity="0.35">
+        <line x1="208" y1="720" x2="176" y2="360"/>
+        <line x1="256" y1="720" x2="280" y2="320"/>
+        <line x1="576" y1="720" x2="608" y2="280"/>
+        <line x1="528" y1="720" x2="496" y2="380"/>
+      </g>
+    
+  <rect width="800" height="1000" fill="url(#mist-port-3)"/>
+</svg>

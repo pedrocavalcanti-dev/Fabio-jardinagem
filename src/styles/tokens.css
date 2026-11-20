@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Design System Tokens — Fábio Jardinagem & Paisagismo
+   Centralize aqui cores, tipografia, espaçamentos, raios e transições.
+   ========================================================================== */
+
+:root {
+  /* Paleta principal */
+  --color-forest: #102f25;
+  --color-forest-deep: #0b221a;
+  --color-forest-mid: #194233;
+  --color-natural: #23543c;
+  --color-natural-hover: #1b4330;
+  --color-lime: #c5f27a;
+  --color-lime-hover: #b4e85f;
+  --color-sage-tint: #eaf3e7;
+  --color-sage-soft: #d7e7d3;
+  --color-bg-warm: #f9faf6;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f2f5ee;
+
+  /* Texto */
+  --color-text-primary: #172820;
+  --color-text-secondary: #5a6960;
+  --color-text-muted: #66746b;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-soft: rgba(255, 255, 255, 0.8);
+  --color-text-inverse-muted: rgba(255, 255, 255, 0.64);
+
+  /* Bordas */
+  --color-border-subtle: rgba(16, 47, 37, 0.1);
+  --color-border-strong: rgba(16, 47, 37, 0.18);
+  --color-border-inverse: rgba(255, 255, 255, 0.18);
+
+  /* Tipografia */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-editorial: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+  /* Escala fluida com clamp() */
+  --text-xs: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.15vw, 0.9375rem);
+  --text-base: clamp(0.975rem, 0.95rem + 0.15vw, 1.0625rem);
+  --text-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.12rem + 0.55vw, 1.5rem);
+  --text-2xl: clamp(1.625rem, 1.35rem + 1.2vw, 2.35rem);
+  --text-3xl: clamp(1.95rem, 1.5rem + 1.9vw, 3rem);
+  --text-hero: clamp(2.15rem, 1.55rem + 2.8vw, 4.15rem);
+
+  /* Alturas de linha */
+  --leading-tight: 1.08;
+  --leading-snug: 1.22;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.68;
+
+  /* Espaçamento (escala de 8px) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-7: 1.75rem;  /* 28px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-14: 3.5rem;  /* 56px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+  --space-24: 6rem;    /* 96px */
+
+  /* Seções e Container */
+  --container-max: 1200px;
+  --container-wide: 1320px;
+  --container-px: clamp(1rem, 4vw, 2rem);
+  --section-py: clamp(3.5rem, 6vw, 6rem);
+  --header-height: 76px;
+
+  /* Raios de borda */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 9999px;
+
+  /* Sombras sutis */
+  --shadow-xs: 0 1px 2px rgba(16, 47, 37, 0.05);
+  --shadow-sm: 0 4px 16px rgba(16, 47, 37, 0.06);
+  --shadow-md: 0 12px 32px rgba(16, 47, 37, 0.1);
+  --shadow-lg: 0 24px 56px rgba(16, 47, 37, 0.16);
+
+  /* Transições */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 180ms var(--ease-out);
+  --transition-base: 280ms var(--ease-out);
+  --transition-slow: 480ms var(--ease-out);
+
+  /* Camadas */
+  --z-base: 1;
+  --z-sticky: 30;
+  --z-header: 50;
+  --z-mobile-bar: 45;
+  --z-drawer: 70;
+  --z-modal: 90;
+}

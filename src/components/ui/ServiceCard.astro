@@ -1,0 +1,158 @@
+---
+import { Flower2, Scissors, Sprout, Trees, Wind } from '@lucide/astro';
+import type { ServiceItem } from '@/data/services';
+import { siteConfig } from '@/config/site';
+import ResponsivePhoto from './ResponsivePhoto.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+
+interface Props {
+  service: ServiceItem;
+  ctaLabel?: string;
+}
+
+const { service, ctaLabel = 'Consultar serviço' } = Astro.props;
+const message = service.whatsappMessage ?? siteConfig.whatsappMessages.service(service.title);
+---
+
+<article class="service-card" data-service-card>
+  <div class="service-card__media">
+    <ResponsivePhoto
+      src={service.image}
+      alt={service.alt}
+      widths={[420, 640, 840]}
+      sizes="(max-width: 640px) 84vw, (max-width: 1024px) 46vw, 380px"
+      objectPosition={service.objectPosition ?? 'center center'}
+      class="service-card__img"
+    />
+    <div class="service-card__scrim" aria-hidden="true"></div>
+
+    {service.isPlaceholder && <span class="photo-placeholder-badge">Espaço para foto real</span>}
+
+    <span class="service-card__icon" aria-hidden="true">
+      {service.icon === 'sprout' && <Sprout size={18} stroke-width={2} />}
+      {service.icon === 'trees' && <Trees size={18} stroke-width={2} />}
+      {service.icon === 'scissors' && <Scissors size={18} stroke-width={2} />}
+      {service.icon === 'flower' && <Flower2 size={18} stroke-width={2} />}
+      {service.icon === 'wind' && <Wind size={18} stroke-width={2} />}
+    </span>
+  </div>
+
+  <div class="service-card__body on-dark">
+    <h3 class="service-card__title">{service.title}</h3>
+    <p class="service-card__desc">{service.shortDescription}</p>
+    <div class="service-card__action">
+      <WhatsAppButton
+        message={message}
+        label={ctaLabel}
+        variant="surface"
+        size="sm"
+        icon="arrow"
+        ariaLabel={`${ctaLabel}: ${service.title} pelo WhatsApp`}
+      />
+    </div>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 410px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background-color: var(--color-forest);
+    box-shadow: var(--shadow-sm);
+    isolation: isolate;
+    scroll-snap-align: start;
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .service-card__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .service-card__img {
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .service-card:hover .service-card__img {
+    transform: scale(1.04);
+  }
+
+  .service-card__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(11, 34, 26, 0.08) 0%,
+      rgba(11, 34, 26, 0.25) 42%,
+      rgba(11, 34, 26, 0.88) 82%,
+      rgba(11, 34, 26, 0.96) 100%
+    );
+  }
+
+  .service-card__icon {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: var(--color-forest);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .service-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    color: var(--color-surface);
+  }
+
+  .service-card__title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-surface);
+  }
+
+  .service-card__desc {
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.84);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .service-card__action {
+    padding-top: var(--space-2);
+  }
+
+  @media (min-width: 768px) {
+    .service-card {
+      min-height: 440px;
+    }
+  }
+</style>

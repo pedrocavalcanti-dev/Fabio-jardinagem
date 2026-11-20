@@ -1,0 +1,124 @@
+---
+/**
+ * Componente isolado da marca provisória.
+ * Quando a identidade visual definitiva / logo oficial estiver pronta,
+ * basta substituir a marcação interna deste arquivo sem alterar Header nem Footer.
+ */
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  variant?: 'light' | 'dark';
+  href?: string;
+  showSubtitle?: boolean;
+}
+
+const { variant = 'dark', href = '#inicio', showSubtitle = true } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['brand-logo', `brand-logo--${variant}`]}
+  aria-label={`${siteConfig.brand.name} — Ir para o início`}
+>
+  <span class="brand-logo__mark" aria-hidden="true">
+    <svg viewBox="0 0 36 36" width="36" height="36" fill="none">
+      <rect width="36" height="36" rx="11" class="brand-logo__mark-bg" />
+      <path
+        d="M18 7.5C13.8 11.7 11.5 16.1 11.5 20.5C11.5 24.1 14.4 27 18 27C21.6 27 24.5 24.1 24.5 20.5C24.5 16.1 22.2 11.7 18 7.5Z"
+        class="brand-logo__leaf"
+      />
+      <path
+        d="M18 12.2V28.5M18 18.8L14.2 15.8M18 22.2L21.8 19.2"
+        class="brand-logo__stem"
+        stroke-width="1.75"
+        stroke-linecap="round"
+      />
+    </svg>
+  </span>
+  <span class="brand-logo__text">
+    <span class="brand-logo__name">{siteConfig.brand.shortName}</span>
+    {showSubtitle && <span class="brand-logo__subtitle">{siteConfig.brand.subtitle}</span>}
+  </span>
+</a>
+
+<style>
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 44px;
+    padding-block: 4px;
+    transition: opacity var(--transition-fast);
+  }
+
+  .brand-logo:hover {
+    opacity: 0.9;
+  }
+
+  .brand-logo__mark {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .brand-logo__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+
+  .brand-logo__name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .brand-logo__subtitle {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Tema claro (sobre fundo escuro) */
+  .brand-logo--light .brand-logo__name {
+    color: var(--color-surface);
+  }
+
+  .brand-logo--light .brand-logo__subtitle {
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .brand-logo--light .brand-logo__mark-bg {
+    fill: rgba(255, 255, 255, 0.14);
+  }
+
+  .brand-logo--light .brand-logo__leaf {
+    fill: var(--color-lime);
+  }
+
+  .brand-logo--light .brand-logo__stem {
+    stroke: var(--color-forest);
+  }
+
+  /* Tema escuro (sobre fundo claro) */
+  .brand-logo--dark .brand-logo__name {
+    color: var(--color-forest);
+  }
+
+  .brand-logo--dark .brand-logo__subtitle {
+    color: var(--color-text-secondary);
+  }
+
+  .brand-logo--dark .brand-logo__mark-bg {
+    fill: var(--color-forest);
+  }
+
+  .brand-logo--dark .brand-logo__leaf {
+    fill: var(--color-lime);
+  }
+
+  .brand-logo--dark .brand-logo__stem {
+    stroke: var(--color-forest);
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+import '@fontsource/cormorant-garamond/600-italic.css';
+
+import '@/styles/tokens.css';
+import '@/styles/global.css';
+
+import { getSanitizedWhatsAppNumber, isWhatsAppConfigured, siteConfig } from '@/config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteConfig.seo.title, description = siteConfig.seo.description } = Astro.props;
+
+const canonicalBase = siteConfig.seo.siteUrl;
+const canonicalUrl = canonicalBase ? new URL(Astro.url.pathname, canonicalBase).toString() : null;
+const ogImageUrl =
+  canonicalBase && siteConfig.seo.ogImage
+    ? new URL(siteConfig.seo.ogImage, canonicalBase).toString()
+    : null;
+
+/**
+ * Dados estruturados (Schema.org) contendo exclusivamente informações verificadas.
+ * Campos como telefone, região, URL e redes sociais só entram quando preenchidos.
+ */
+const structuredData: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  name: siteConfig.brand.name,
+  description: siteConfig.brand.description,
+};
+
+if (canonicalUrl) {
+  structuredData.url = canonicalUrl;
+}
+if (isWhatsAppConfigured()) {
+  structuredData.telephone = `+${getSanitizedWhatsAppNumber()}`;
+}
+if (siteConfig.contact.serviceRegion) {
+  structuredData.areaServed = siteConfig.contact.serviceRegion;
+}
+if (siteConfig.contact.instagramUrl) {
+  structuredData.sameAs = [siteConfig.contact.instagramUrl];
+}
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#102F25" />
+
+    <title>{title}</title>
+
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={siteConfig.seo.locale} />
+    <meta property="og:site_name" content={siteConfig.brand.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- JSON-LD apenas com dados reais configurados -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+    <slot />
+
+    <script>
+      import '@/scripts/interactions';
+    </script>
+  </body>
+</html>

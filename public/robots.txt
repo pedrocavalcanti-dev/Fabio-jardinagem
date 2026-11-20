@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Quando o domínio definitivo estiver configurado (SITE_URL), descomente e atualize:
+# Sitemap: https://seudominio.com.br/sitemap-index.xml

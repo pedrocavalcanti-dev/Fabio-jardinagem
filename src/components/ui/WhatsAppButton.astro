@@ -1,0 +1,83 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import { buildWhatsAppUrl } from '@/config/site';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+
+interface Props {
+  message: string;
+  label?: string;
+  variant?: 'lime' | 'primary' | 'outline-dark' | 'outline-light' | 'surface';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: 'whatsapp' | 'arrow' | 'both' | 'none';
+  class?: string;
+  ariaLabel?: string;
+  fullWidth?: boolean;
+}
+
+const {
+  message,
+  label = 'Solicitar orçamento',
+  variant = 'lime',
+  size = 'md',
+  icon = 'both',
+  class: className,
+  ariaLabel,
+  fullWidth = false,
+} = Astro.props;
+
+const whatsappUrl = buildWhatsAppUrl(message);
+const classes = [
+  'btn',
+  `btn--${variant}`,
+  size !== 'md' && `btn--${size}`,
+  fullWidth && 'wa-btn--full',
+  className,
+];
+const accessibleLabel = ariaLabel ?? `${label} pelo WhatsApp`;
+---
+
+{
+  whatsappUrl ? (
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={classes}
+      aria-label={accessibleLabel}
+    >
+      {(icon === 'whatsapp' || icon === 'both') && <WhatsAppIcon size={18} />}
+      <span>
+        <slot>{label}</slot>
+      </span>
+      {(icon === 'arrow' || icon === 'both') && (
+        <span class="btn__circle" aria-hidden="true">
+          <ArrowUpRight size={15} stroke-width={2.2} />
+        </span>
+      )}
+    </a>
+  ) : (
+    <button
+      type="button"
+      class:list={classes}
+      aria-label={accessibleLabel}
+      data-whatsapp-fallback
+      data-whatsapp-message={message}
+    >
+      {(icon === 'whatsapp' || icon === 'both') && <WhatsAppIcon size={18} />}
+      <span>
+        <slot>{label}</slot>
+      </span>
+      {(icon === 'arrow' || icon === 'both') && (
+        <span class="btn__circle" aria-hidden="true">
+          <ArrowUpRight size={15} stroke-width={2.2} />
+        </span>
+      )}
+    </button>
+  )
+}
+
+<style>
+  .wa-btn--full {
+    width: 100%;
+  }
+</style>

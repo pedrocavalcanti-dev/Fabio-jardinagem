@@ -1,0 +1,37 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import FloatingActions from '@/components/layout/FloatingActions.astro';
+import WhatsAppFallbackModal from '@/components/ui/WhatsAppFallbackModal.astro';
+
+import Hero from '@/components/sections/Hero.astro';
+import Highlights from '@/components/sections/Highlights.astro';
+import About from '@/components/sections/About.astro';
+import Services from '@/components/sections/Services.astro';
+import Portfolio from '@/components/sections/Portfolio.astro';
+import WhyChooseUs from '@/components/sections/WhyChooseUs.astro';
+import Process from '@/components/sections/Process.astro';
+import CTA from '@/components/sections/CTA.astro';
+import FAQ from '@/components/sections/FAQ.astro';
+---
+
+<BaseLayout>
+  <Header />
+
+  <main id="conteudo-principal">
+    <Hero />
+    <Highlights />
+    <About />
+    <Services />
+    <Portfolio />
+    <WhyChooseUs />
+    <Process />
+    <CTA />
+    <FAQ />
+  </main>
+
+  <Footer />
+  <FloatingActions />
+  <WhatsAppFallbackModal />
+</BaseLayout>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-hero-d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#163D2D"/>
+      <stop offset="52%" stop-color="#23543C"/>
+      <stop offset="100%" stop-color="#102F25"/>
+    </linearGradient>
+    <radialGradient id="sun-hero-d" cx="74%" cy="22%" r="58%">
+      <stop offset="0%" stop-color="#C5F27A" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#C5F27A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#C5F27A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mist-hero-d" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B221A" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0B221A" stop-opacity="0.34"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg-hero-d)"/>
+  <rect width="1600" height="1000" fill="url(#sun-hero-d)"/>
+  
+      <!-- Rolling manicured lawn lines & sunlight -->
+      <path d="M0 440 Q 560 360, 1152 460 T 1600 400 L 1600 1000 L 0 1000 Z" fill="#1E4C36"/>
+      <!-- Subtle mowing stripes -->
+      <g opacity="0.14" fill="#C5F27A">
+        <polygon points="80,1000 352,440 480,440 320,1000"/>
+        <polygon points="544,1000 704,440 832,440 784,1000"/>
+        <polygon points="1024,1000 1056,440 1184,440 1264,1000"/>
+      </g>
+      <path d="M0 660 Q 720 540, 1600 640 L 1600 1000 L 0 1000 Z" fill="#153A2A" opacity="0.88"/>
+      <path d="M0 820 Q 832 720, 1600 800 L 1600 1000 L 0 1000 Z" fill="#0E291F"/>
+      <!-- Canopy framing top -->
+      <ellipse cx="224.00000000000003" cy="140" rx="384" ry="180" fill="#0E291F" opacity="0.55"/>
+      <ellipse cx="1408" cy="160" rx="352" ry="160" fill="#153A2A" opacity="0.48"/>
+    
+  <rect width="1600" height="1000" fill="url(#mist-hero-d)"/>
+</svg>

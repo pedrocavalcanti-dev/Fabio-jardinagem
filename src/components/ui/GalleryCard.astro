@@ -1,0 +1,171 @@
+---
+import { Expand } from '@lucide/astro';
+import type { PortfolioItem } from '@/data/portfolio';
+import ResponsivePhoto from './ResponsivePhoto.astro';
+
+interface Props {
+  item: PortfolioItem;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+---
+
+<figure
+  class:list={['gallery-card', `gallery-card--${item.orientation}`]}
+  data-gallery-item
+  data-category={item.category}
+>
+  <button
+    type="button"
+    class="gallery-card__trigger"
+    data-lightbox-open={index}
+    aria-label={`Ampliar fotografia: ${item.title}`}
+  >
+    <span class="gallery-card__frame">
+      <ResponsivePhoto
+        src={item.image}
+        alt={item.alt}
+        widths={[480, 768, 1080]}
+        sizes="(max-width: 640px) 84vw, (max-width: 1024px) 46vw, 380px"
+        objectPosition={item.objectPosition ?? 'center center'}
+        class="gallery-card__img"
+      />
+      <span class="gallery-card__scrim" aria-hidden="true"></span>
+
+      {item.isPlaceholder && <span class="photo-placeholder-badge">Espaço para foto real</span>}
+
+      <span class="gallery-card__zoom" aria-hidden="true">
+        <Expand size={16} stroke-width={2} />
+      </span>
+
+      <span class="gallery-card__meta">
+        <span class="gallery-card__category">{item.category}</span>
+        <span class="gallery-card__title">{item.title}</span>
+      </span>
+    </span>
+  </button>
+</figure>
+
+<style>
+  .gallery-card {
+    position: relative;
+    margin: 0;
+    scroll-snap-align: start;
+  }
+
+  .gallery-card__trigger {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    border-radius: var(--radius-xl);
+  }
+
+  .gallery-card__frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background-color: var(--color-forest);
+    box-shadow: var(--shadow-xs);
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .gallery-card__trigger:hover .gallery-card__frame {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .gallery-card__img {
+    transition: transform 620ms var(--ease-out);
+  }
+
+  .gallery-card__trigger:hover .gallery-card__img {
+    transform: scale(1.045);
+  }
+
+  .gallery-card__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(16, 47, 37, 0.04) 40%,
+      rgba(16, 47, 37, 0.78) 100%
+    );
+    transition: opacity var(--transition-fast);
+  }
+
+  .gallery-card__zoom {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-forest);
+    box-shadow: var(--shadow-xs);
+    transition:
+      background-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .gallery-card__trigger:hover .gallery-card__zoom {
+    background-color: var(--color-lime);
+    transform: scale(1.06);
+  }
+
+  .gallery-card__meta {
+    position: absolute;
+    inset-inline: var(--space-5);
+    bottom: var(--space-5);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--color-surface);
+  }
+
+  .gallery-card__category {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-lime);
+  }
+
+  .gallery-card__title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-surface);
+  }
+
+  /* Em desktop, respeita a orientação editorial (vertical, horizontal e quadrada) */
+  @media (min-width: 1024px) {
+    .gallery-card--portrait .gallery-card__frame {
+      aspect-ratio: 4 / 5;
+    }
+
+    .gallery-card--landscape .gallery-card__frame {
+      aspect-ratio: 16 / 11;
+    }
+
+    .gallery-card--square .gallery-card__frame {
+      aspect-ratio: 1 / 1;
+    }
+  }
+</style>
