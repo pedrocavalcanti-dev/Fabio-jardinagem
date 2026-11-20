@@ -66,40 +66,69 @@ function initMobileMenu(): void {
   });
 }
 
-function initMobileCtaBar(): void {
+function initFloatingActions(): void {
   const bar = document.querySelector<HTMLElement>('[data-mobile-cta-bar]');
   const desktopFloat = document.querySelector<HTMLElement>('[data-desktop-wa-float]');
-  const heroCta = document.querySelector<HTMLElement>('[data-hero-cta]');
-  if (!heroCta) return;
-
-  const competingActions = document.querySelectorAll<HTMLElement>('[data-inline-cta], #contato');
+  const floatButton = desktopFloat?.querySelector<HTMLElement>('.desktop-whatsapp-float__fab');
+  const heroButton = document.querySelector<HTMLElement>('[data-hero-cta] .btn');
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const desktop = window.matchMedia('(min-width: 1024px)');
   const viewport = window.visualViewport;
-  const visibleActions = new Set<Element>();
-  let pastHero = false;
+  const controls = Array.from(document.querySelectorAll<HTMLElement>(
+    'main a[href], main button, footer a[href], footer button',
+  )).filter((control) => !control.closest('dialog'));
+  let frame = 0;
 
-  const sync = () => {
-    const keyboardOpen = viewport && window.innerHeight - viewport.height > 150;
-    const visible = pastHero && visibleActions.size === 0 && !keyboardOpen;
-    if (bar) bar.dataset.visible = String(visible);
-    if (desktopFloat) desktopFloat.dataset.visible = String(visible);
-  };
+  const update = () => {
+    frame = 0;
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+    const hero = heroButton?.getBoundingClientRect();
+    const heroAvailable = hero && hero.top >= headerBottom && hero.bottom <= window.innerHeight;
+    const keyboardOpen = viewport && viewport.scale === 1 &&
+      window.innerHeight - viewport.height > 150 &&
+      document.activeElement?.matches('input, textarea, [contenteditable="true"]');
 
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.target === heroCta) {
-        pastHero = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
-      } else if (entry.isIntersecting) {
-        visibleActions.add(entry.target);
-      } else {
-        visibleActions.delete(entry.target);
+    const barVisible = String(!heroAvailable && !keyboardOpen);
+    if (bar && bar.dataset.visible !== barVisible) bar.dataset.visible = barVisible;
+    if (!desktopFloat || !floatButton || !desktop.matches) return;
+
+    const floatVisible = String(!heroAvailable);
+    if (desktopFloat.dataset.visible !== floatVisible) desktopFloat.dataset.visible = floatVisible;
+    if (heroAvailable) return;
+
+    const { left, right, height } = floatButton.getBoundingClientRect();
+    const inset = Number.parseFloat(getComputedStyle(desktopFloat).bottom);
+    const dockBottom = document.documentElement.clientHeight - inset;
+    const clearance = 8;
+    let bottom = dockBottom;
+
+    // Move o botão apenas quando sua posição cobriria um controle da página.
+    const nearby = controls.map((control) => control.getBoundingClientRect())
+      .filter((rect) => rect.height > 0 && rect.width > 0 && rect.left < right &&
+        rect.right > left && rect.top < dockBottom + clearance && rect.bottom > headerBottom)
+      .sort((a, b) => b.bottom - a.bottom);
+
+    for (const rect of nearby) {
+      if (rect.top < bottom + clearance && rect.bottom > bottom - height - clearance) {
+        bottom = rect.top - clearance;
       }
     }
-    sync();
-  });
 
-  observer.observe(heroCta);
-  competingActions.forEach((action) => observer.observe(action));
-  viewport?.addEventListener('resize', sync);
+    const minBottom = headerBottom + height + clearance;
+    const lift = Math.max(0, dockBottom - Math.max(bottom, minBottom));
+    desktopFloat.style.setProperty('--whatsapp-lift', `${lift}px`);
+  };
+
+  const scheduleUpdate = () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  };
+
+  window.addEventListener('scroll', scheduleUpdate, { passive: true, capture: true });
+  window.addEventListener('resize', scheduleUpdate);
+  viewport?.addEventListener('resize', scheduleUpdate);
+  new ResizeObserver(scheduleUpdate).observe(document.body);
+  document.fonts.ready.then(scheduleUpdate);
+  update();
 }
 
 function initCarousels(): void {
@@ -390,7 +419,7 @@ function initScrollReveal(): void {
 function bootstrap(): void {
   initHeaderScroll();
   initMobileMenu();
-  initMobileCtaBar();
+  initFloatingActions();
   initCarousels();
   initGalleryFilters();
   initLightbox();

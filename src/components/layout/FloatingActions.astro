@@ -58,14 +58,39 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
   }
 </div>
 
+{import.meta.env.DEV && (
+  <style is:inline>
+    @media (width < 1024px) {
+      body:has([data-mobile-cta-bar][data-visible='true']) astro-dev-toolbar {
+        display: none;
+      }
+    }
+  </style>
+)}
+
 <style>
+  @media (width < 1024px) {
+    :global(html) {
+      --whatsapp-bar-padding: 0.65rem;
+      --whatsapp-bar-clearance: calc(max(44px, 2.5rem) + 2 * var(--whatsapp-bar-padding) + 1px + env(safe-area-inset-bottom));
+      scroll-padding-block-end: var(--whatsapp-bar-clearance);
+    }
+
+    :global(body) {
+      padding-block-end: var(--whatsapp-bar-clearance);
+    }
+  }
+
   .mobile-cta-bar {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: var(--z-mobile-bar);
-    padding: 0.65rem var(--container-px) calc(0.65rem + env(safe-area-inset-bottom));
+    padding-top: var(--whatsapp-bar-padding, 0.65rem);
+    padding-right: max(var(--container-px), env(safe-area-inset-right));
+    padding-bottom: calc(var(--whatsapp-bar-padding, 0.65rem) + env(safe-area-inset-bottom));
+    padding-left: max(var(--container-px), env(safe-area-inset-left));
     background: rgba(255, 255, 255, 0.96);
     border-top: 1px solid var(--color-border-subtle);
     backdrop-filter: blur(14px);
@@ -90,13 +115,11 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
     min-height: 44px;
   }
 
-  /* Nunca competir com menu mobile ou lightbox abertos */
+  /* O diálogo nativo preserva o foco enquanto a ação fica transparente. */
   :global(body.has-overlay-open) .mobile-cta-bar,
   :global(body.has-overlay-open) .desktop-whatsapp-float {
-    transform: translateY(110%);
     opacity: 0;
     pointer-events: none;
-    visibility: hidden;
   }
 
   .mobile-cta-bar__inner {
@@ -147,9 +170,10 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
 
     .desktop-whatsapp-float {
       position: fixed;
-      right: var(--space-6);
-      bottom: var(--space-6);
+      right: max(var(--space-6), env(safe-area-inset-right));
+      bottom: max(var(--space-6), env(safe-area-inset-bottom));
       z-index: var(--z-sticky);
+      translate: 0 calc(0px - var(--whatsapp-lift, 0px));
       display: inline-flex;
       align-items: center;
       gap: var(--space-3);
@@ -166,7 +190,6 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
-      pointer-events: auto;
     }
 
     .desktop-whatsapp-float__tooltip {
@@ -210,12 +233,25 @@ const floatUrl = buildWhatsAppUrl(floatMessage);
         box-shadow var(--transition-fast);
     }
 
+    :global(body:not(.has-overlay-open)) .desktop-whatsapp-float[data-visible='true'] .desktop-whatsapp-float__fab {
+      pointer-events: auto;
+    }
+
     .desktop-whatsapp-float__fab:hover {
       background: var(--color-lime);
       color: var(--color-forest);
       border-color: var(--color-forest);
       transform: translateY(-2px) scale(1.03);
       box-shadow: 0 16px 34px rgba(16, 47, 37, 0.32);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-cta-bar,
+    .mobile-cta-bar :global(*),
+    .desktop-whatsapp-float,
+    .desktop-whatsapp-float :global(*) {
+      transition-property: none;
     }
   }
 </style>
